@@ -48,12 +48,6 @@ class Player(pygame.sprite.Sprite):
                 if (abs(difference.x) <= 100 and abs(difference.y == 0))  or (abs(difference.y) <=100 and abs(difference.x == 0)):
                     if not self.detect_collision(self.dir):
                         self.dir = difference.normalize() * -1
-        #TODO fix
-        #IDEA TO BE IMPLEMANTED WITH PYHTON ENVIROMENT - to remove bonk
-        #center - other center = difference
-        #if both absoulte values of x and y are less than 100 
-        #normalise difference   --  hope to get a (1,0) vector
-        #normaised difference * -1 = self.dir
 
     #Assigns the wish diretion based on the input and checks if the player fires
     def input(self):
