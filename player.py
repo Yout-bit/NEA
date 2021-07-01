@@ -1,9 +1,10 @@
+from random import normalvariate
 import pygame
 from pygame.locals import *
 import math
 from pygame.math import Vector2 
 
-centers = []
+centers = [Vector2(0,0), Vector2(0,0)]
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, size, move_speed, start_x, start_y, level, inp_moves, name, colour):
@@ -40,15 +41,18 @@ class Player(pygame.sprite.Sprite):
 
     #Checks if the center of the player lies within a players width of the center of the other player
     def detect_player(self):
-        for i in range centers:
-            if i != self.rect.center and self.bonk == 0:
-                if ((i.x - self.width) <= self.rect.centerx <= (i.x + self.width)) and ((i.y - self.width) <= self.rect.centery <= (i.y + self.width)):
-                    self.dir *= -1
-                    self.bonk = 10
+        for i in centers:
+            if (centers.index(i) != (int(self.name)-1)):
+                i = Vector2(i)
+                difference = Vector2((i.x - self.rect.centerx), (i.y - self.rect.centery))
+                if (abs(difference.x) <= 100 and abs(difference.y == 0))  or (abs(difference.y) <=100 and abs(difference.x == 0)):
+                    if not self.detect_collision(self.dir):
+                        self.dir = difference.normalize() * -1
+        #TODO fix
         #IDEA TO BE IMPLEMANTED WITH PYHTON ENVIROMENT - to remove bonk
         #center - other center = difference
         #if both absoulte values of x and y are less than 100 
-        #normalise difference   --  hope to ghet a (1,0) vector
+        #normalise difference   --  hope to get a (1,0) vector
         #normaised difference * -1 = self.dir
 
     #Assigns the wish diretion based on the input and checks if the player fires
@@ -67,7 +71,7 @@ class Player(pygame.sprite.Sprite):
 
     #Normalise the direction vector then checks the wish direction doesnt push the player into a wall and is not opposite to the current direction. Then tests for collision with other player
     def update(self):
-        centers[int(self.name)-1] == self.rect.center
+        centers[int(self.name)-1] = self.rect.center
         self.input()
         if self.dir.magnitude() != 0:
             normal_dir = self.dir.normalize()
@@ -77,12 +81,11 @@ class Player(pygame.sprite.Sprite):
         if self.wish_dir.dot(normal_dir) != -1 and not self.detect_collision(self.wish_dir):
             self.dir = self.wish_dir
         
+        self.detect_player()
         if not self.detect_collision(self.dir):
             self.rect.move_ip(self.dir * self.move_speed)
-
-        self.detect_player()
-        if self.bonk != 0:
-            self.bonk-= 1
+        else:
+            pass
 
 
     def get_center(self):
