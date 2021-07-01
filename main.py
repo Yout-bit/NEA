@@ -17,7 +17,7 @@ FPS = 60
 FramePerSec = pygame.time.Clock()
 
 def map():
-    map_choice = random.randint(0,5)
+    map_choice = random.randint(3,3)
     if map_choice == 0:
         MAP = "##########-------##-###-#-##-----#-##-###-#-##-------##-#-###-##-#-----##-#-###-##-------##########"
     elif map_choice == 1:
@@ -93,10 +93,9 @@ while game_playing:
 
 
     DISPLAYSURF.fill(Colours["GREY"])
-    center1 = P1.get_center()
-    center2 = P2.get_center()
-    P1.update(center2)
-    P2.update(center1)
+
+    P1.update()
+    P2.update()
     S1.update()
     S2.update()
 
@@ -136,4 +135,3 @@ while True:
         if event.type == pygame.locals.QUIT:
             pygame.quit()
             sys.exit()
-
