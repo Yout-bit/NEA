@@ -1,5 +1,6 @@
 # TODO
 
+
 - Change player on player dection system - more info in player class
 
 ---
@@ -43,3 +44,4 @@
      -  Make map into a class rather than a function `6/4/21`
      -  Store maps as strings rather than 2d arrays `27/6/21`
      -  NEW MAPS BABY - random map chosing at the start of the game `27/6/21`
+~~
