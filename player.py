@@ -81,29 +81,28 @@ class Player(pygame.sprite.Sprite):
         else:
             pass
 
-
+    #Returns the center of the player
     def get_center(self):
         return Vector2(self.rect.center)
 
-
+    #Returns the front point of the player (Used for projectile starting pos) 
     def get_front(self):
         return (self.rect.center + self.dir * (self.size / 2))
 
-
-    def get_hitbox(self, width):
-        back_point =  (self.rect.center - self.dir * (self.size / 2)) 
-        inner_back_point =  (self.rect.center - self.dir * ((self.size / 2) - width)) 
-        return back_point, inner_back_point
-
+    #Returns a Rect object that is the hitbox
+    def get_hitbox(self):
+        backrect = None
+        if self.dir != (0,0):
+            backrect = self.rect.copy()
+            backrect.width -= (abs(self.dir.x) * 85)
+            backrect.height -= (abs(self.dir.y) *85)
+            backrect.top += 85 * (abs(self.dir.y) - self.dir.y) / 2 
+            backrect.left += 85 * (abs(self.dir.x) - self.dir.x) / 2
+        return backrect
     
     
     def draw(self,surface):
         pygame.draw.rect(surface, self.colour, self.rect)
-        if self.dir != (0,0):
-            backrect = self.rect.copy()
-            backrect.width -= abs(self.dir.x * 90)
-            backrect.height -= abs(self.dir.y *90)
-            if self.dir in [(-1,0),(0,-1)]:
-                backrect.top += 90 * abs(self.dir.y)
-                backrect.left += 90 * abs(self.dir.x)
+        backrect = self.get_hitbox()
+        if backrect != None:
             pygame.draw.rect(surface, (255, 47, 51), backrect)
