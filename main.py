@@ -1,9 +1,11 @@
 import sys
 import pygame
-from pygame.key import get_mods
+from pygame.key import *
 from pygame.locals import *
 import math
 import random
+from OpenGL.GL import *
+from OpenGL.GLU import *
 
 
 from player import Player
@@ -69,7 +71,11 @@ SCREEN_WIDTH = 1100
 TILE_WIDTH = int(SCREEN_WIDTH / 11)
 SCREEN_HEIGHT = int(TILE_WIDTH * 9)
 
+#DISPLAYSURF = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), DOUBLEBUF|OPENGL)
 DISPLAYSURF = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+#gluPerspective(45, (SCREEN_WIDTH/SCREEN_HEIGHT), 0.1, 50.0)
+#glTranslatef(0.0,0.0, -5)
 
 FONT = pygame.font.SysFont('didot.ttc', 140)
 
@@ -82,7 +88,6 @@ game_playing = True
 while True:
     if game_playing:
         pygame.display.update()
-
 
         DISPLAYSURF.fill(Colours["GREY"])
 
