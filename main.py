@@ -28,7 +28,7 @@ Colours = {
 
 #Establishing functions
 def map():
-    map_choice = random.randint(0,5)
+    map_choice = random.randint(6,6)
     if map_choice == 0:
         MAP = "##########-------##-###-#-##-----#-##-###-#-##-------##-#-###-##-#-----##-#-###-##-------##########"
     elif map_choice == 1:
@@ -41,10 +41,13 @@ def map():
         MAP = "##########-------##-#-###-##-#-###-##-------##-##-##-##-------##-###-#-##-###-#-##-------##########"
     elif map_choice == 5:
         MAP = "##########-------##-##-##-##-------##-#-#-#-##-#-#-#-##-#-#-#-##-------##-##-##-##-------##########"
+    elif map_choice == 6:
+        MAP = "##########-------##-##-##-##-------##-#-#-#-##-#-#-#-##-#-#-#-##-------##-##-##-##-------####################-------##-##-##-##-------##-#-#-#-##-#-#-#-##-#-#-#-##-------##-##-##-##-------####################-------##-##-##-##-------##-#-#-#-##-#-#-#-##-#-#-#-##-------##-##-##-##-------####################-------##-##-##-##-------##-#-#-#-##-#-#-#-##-#-#-#-##-------##-##-##-##-------##########"
     return MAP
 
 def setup():
     MAP = map()
+    TILE_WIDTH = math.sqrt((SCREEN_HEIGHT * SCREEN_WIDTH) /  len(MAP)) 
     level = Grid(MAP, TILE_WIDTH)
     P1 = Player(TILE_WIDTH, 5, TILE_WIDTH, TILE_WIDTH, level, [pygame.K_w, pygame.K_s, pygame.K_a, pygame.K_d, pygame.K_q], "1", (174, 137, 218))
     P2 = Player(TILE_WIDTH, 5, (9) * TILE_WIDTH, (7) * TILE_WIDTH, level, [pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_SPACE], "2", (124, 227, 228))
@@ -69,8 +72,7 @@ FPS = 60
 FramePerSec = pygame.time.Clock()
 
 SCREEN_WIDTH = 1100
-TILE_WIDTH = int(SCREEN_WIDTH / 11)
-SCREEN_HEIGHT = int(TILE_WIDTH * 9)
+SCREEN_HEIGHT = 900
 
 #DISPLAYSURF = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), DOUBLEBUF|OPENGL)
 DISPLAYSURF = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -87,7 +89,7 @@ P1, P2, S1, S2, level = setup()
 P1ready = P2ready = False
 P1text = "Press q to ready"
 P2text = "Press space to ready"
-COUNTDOWN = FPS * 5
+COUNTDOWN = FPS * 5 * 0
 
 
 #Main loop
@@ -108,8 +110,7 @@ while True:
 
         if P1ready and P2ready:
             COUNTDOWN -= 1
-            DISPLAYSURF.blit(NUMBERS.render(str(COUNTDOWN // FPS + 1), True, Colours["BLACK"]), (SCREEN_WIDTH //2 -125, SCREEN_HEIGHT // 2 -125))
-            pygame.draw.rect(DISPLAYSURF, Colours["GREEN"], Rect(SCREEN_WIDTH //2 -120, SCREEN_HEIGHT // 2 -120, 250,250))
+            DISPLAYSURF.blit(NUMBERS.render(str(COUNTDOWN // FPS + 1), True, Colours["BLACK"]), (SCREEN_WIDTH //2 , SCREEN_HEIGHT // 2 ))
         if COUNTDOWN == 0: 
             game = "playing"
 
