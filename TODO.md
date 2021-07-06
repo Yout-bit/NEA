@@ -11,7 +11,7 @@
 ---
 
 ### Networking
-???ahh
+1. Do networking
 
 ---
 
@@ -43,4 +43,8 @@
      -  Store maps as strings rather than 2d arrays `27/6/21`
      -  NEW MAPS BABY - random map chosing at the start of the game `27/6/21`
 9. All round improvements
-     - Change player on player dection system - more info in player class `1/7/21`
+     - Change player on player dection system `1/7/21`
+     - Draw hitbox on player `2/7/21`
+     - Change hitbox detection to use rect objects `2/7/21`
+     - Add 'ready' screen `3/7/21`
+     - Add option to repeat game with newly randomised map `3/7/21`
