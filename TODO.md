@@ -1,5 +1,6 @@
 # TODO
 
+-   Show control schemes 
 
 ---
 ### OpenGL
