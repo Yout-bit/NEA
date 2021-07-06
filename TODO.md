@@ -1,6 +1,9 @@
 # TODO
 
 -   Show control schemes 
+-   Bigger maps??? 
+-   MORE MAPS
+-   Adjustable player count and adjustible settings e.g. shot speed/player speed
 
 ---
 ### OpenGL
