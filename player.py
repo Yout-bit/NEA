@@ -78,8 +78,6 @@ class Player(pygame.sprite.Sprite):
         self.detect_player()
         if not self.detect_collision(self.dir):
             self.rect.move_ip(self.dir * self.move_speed)
-        else:
-            pass
 
     #Returns the center of the player
     def get_center(self):
