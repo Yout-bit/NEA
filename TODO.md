@@ -4,7 +4,7 @@
 -   Bigger maps??? 
 -   MORE MAPS
 -   Adjustable player count and adjustible settings e.g. shot speed/player speed
--   Proper Pygame menu 
+-   Proper Pygame menu - https://pygame-menu.readthedocs.io/en/4.0.4/
 
 ---
 ### OpenGL
