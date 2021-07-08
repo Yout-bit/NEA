@@ -4,6 +4,7 @@
 -   Bigger maps??? 
 -   MORE MAPS
 -   Adjustable player count and adjustible settings e.g. shot speed/player speed
+-   Proper Pygame menu 
 
 ---
 ### OpenGL
@@ -14,7 +15,7 @@
     -  Roatate
 ---
 
-### Networking
+### Networking - Priority
 1. Do networking
 
 ---
