@@ -16,8 +16,7 @@
 ---
 
 ### Networking - Priority
-1. Do networking
-
+1. Rip and Tear until it is done
 ---
 
 # DONE
