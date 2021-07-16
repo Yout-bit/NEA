@@ -1,34 +1,3 @@
-Skip to content
-Search or jump to…
-
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@Yout-bit 
-Yout-bit
-/
-NEA
-1
-00
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security
-Insights
-Settings
-NEA/main.py /
-@Yout-bit
-Yout-bit fgh
-Latest commit 207eebe 9 days ago
- History
- 1 contributor
-163 lines (131 sloc)  5.04 KB
-  
 import sys
 import pygame
 from pygame.key import *
