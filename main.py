@@ -60,6 +60,8 @@ def check_hit(player, projectile):
         if hitbox.collidepoint(projectile.center):
             projectile.destroy()
             return True
+        elif player.rect.collidepoint(projectile.center):
+            projectile.destroy()
         else:
             return False
 

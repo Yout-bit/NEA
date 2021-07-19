@@ -47,4 +47,4 @@ class Projectile():
     #Draws itself onto the board
     def draw(self, surface):
         if self.motion:
-            pygame.draw.circle(surface, self.colour, (int(self.center.x), int(self.center.y)), 20)
+            pygame.draw.circle(surface, self.colour, self.center, 20)
