@@ -51,7 +51,9 @@ def setup():
     P2 = Player(TILE_WIDTH, 5, (9) * TILE_WIDTH, (7) * TILE_WIDTH, level, [pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_SPACE], "2", (124, 227, 228))
     S1 = Projectile(15, P1, level, (0, 0, 0))
     S2 = Projectile(15, P2, level, (0, 255, 0))
-    return P1, P2, S1, S2, level
+    P1text = "P1 press q"
+    P2text = "P2 press space"
+    return P1, P2, S1, S2, level, P1text, P2text
       
 
 def check_hit(player, projectile):
@@ -80,16 +82,17 @@ DISPLAYSURF = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 #gluPerspective(45, (SCREEN_WIDTH/SCREEN_HEIGHT), 0.1, 50.0)
 #glTranslatef(0.0,0.0, -5)
 
-TEXT = pygame.font.SysFont('didot.ttc', 140)
-NUMBERS = pygame.font.SysFont('didot.ttc', 250)
 
 pygame.display.set_caption("Game")
 
-P1, P2, S1, S2, level = setup()
+P1, P2, S1, S2, level, P1text, P2text = setup()
+COUNTDOWN = FPS * 5
 P1ready = P2ready = False
-P1text = "Press q to ready"
-P2text = "Press space to ready"
-COUNTDOWN = FPS * 5 * 0
+P1Score = P2Score = 0
+winner = "NEW GAME"
+
+TEXT = pygame.font.SysFont('didot.ttc', 140)
+NUMBERS = pygame.font.SysFont('didot.ttc', 250)
 
 
 #Main loop
@@ -99,8 +102,6 @@ while True:
         pygame.display.update()
         DISPLAYSURF.fill(Colours["GREY"])
 
-        DISPLAYSURF.blit(TEXT.render(P1text, True, Colours["BLACK"]), (50, 50))
-        DISPLAYSURF.blit(TEXT.render(P2text, True, Colours["BLACK"]), (50, 150))
         if pygame.key.get_pressed()[pygame.K_q]:
             P1ready = True
             P1text = "Player 1 is ready"
@@ -109,10 +110,17 @@ while True:
             P2text = "Player 2 is ready"
 
         if P1ready and P2ready:
-            COUNTDOWN -= 1
-            DISPLAYSURF.blit(NUMBERS.render(str(COUNTDOWN // FPS + 1), True, Colours["BLACK"]), (SCREEN_WIDTH //2 , SCREEN_HEIGHT // 2 ))
+             COUNTDOWN -= 1
+             DISPLAYSURF.blit(NUMBERS.render(str(COUNTDOWN // FPS + 1), True, Colours["BLACK"]), (SCREEN_WIDTH //2  - 10, SCREEN_HEIGHT // 2 - 10  ))
         if COUNTDOWN == 0: 
-            game = "playing"
+             game = "playing"
+
+        print (P1text)
+        DISPLAYSURF.blit(TEXT.render(P1text, True, Colours["BLACK"]), (50, 175))
+        DISPLAYSURF.blit(TEXT.render(P2text, True, Colours["BLACK"]), (50, 275))
+        #pygame.draw.rect()
+        DISPLAYSURF.blit(TEXT.render(winner, True, Colours["BLACK"]), (50, 50))
+
 
     elif game == "playing":
         pygame.display.update()
@@ -143,19 +151,16 @@ while True:
 
         DISPLAYSURF.fill(Colours["GREY"])
         if P1_winner:
-            DISPLAYSURF.blit(TEXT.render("Player 1 is the winner", True, Colours["GREEN"]), (50, 50) )
+            winner = "LAST WINNER = P1"
+            P1Score += 1
         else:
-            DISPLAYSURF.blit(TEXT.render("Player 2 is the winner", True, Colours["GREEN"]), (50, 50) )
-        DISPLAYSURF.blit(TEXT.render("Press p to play again", True, Colours["GREEN"]), (50, 150) )
+            winner ="LAST WINNER = P2"
+            P2Score += 1
 
-        if pygame.key.get_pressed()[pygame.K_p]:
-            P1, P2, S1, S2, level = setup()
-            P1ready = P2ready = False
-            P1text = "Press q to ready"
-            P2text = "Press space to ready"
-            COUNTDOWN = FPS * 5
-            game = "start"
-            COUNTDOWN = FPS * 3
+        P1, P2, S1, S2, level, P1text, P2text = setup()
+        P1ready = P2ready = False
+        COUNTDOWN = FPS * 3
+        game = "start"
 
     FramePerSec.tick(FPS)
     #Allows the window to be closed
