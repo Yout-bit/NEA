@@ -26,6 +26,11 @@ Colours = {
     "WHITE" : (255, 255, 255)
     }
 
+x = (5,4,3)
+print (type(x))
+print (x)
+x = (i - 1 for i in x)
+print (x)
 #Establishing functions
 def map():
     map_choice = random.randint(0,5)
@@ -111,11 +116,13 @@ while True:
 
         if P1ready and P2ready:
              COUNTDOWN -= 1
-             DISPLAYSURF.blit(NUMBERS.render(str(COUNTDOWN // FPS + 1), True, Colours["BLACK"]), (SCREEN_WIDTH //2  - 10, SCREEN_HEIGHT // 2 - 10  ))
+             for i in range(150, 0, -10):
+
+                 DISPLAYSURF.blit(NUMBERS.render(str(COUNTDOWN // FPS + 1), True, ((51*i)/50, (17*i)/15, (181*i)/150)), (SCREEN_WIDTH //2  - 10 + i/10, SCREEN_HEIGHT // 2 - 10 + i/10 ))
+
         if COUNTDOWN == 0: 
              game = "playing"
 
-        print (P1text)
         DISPLAYSURF.blit(TEXT.render(P1text, True, Colours["BLACK"]), (50, 175))
         DISPLAYSURF.blit(TEXT.render(P2text, True, Colours["BLACK"]), (50, 275))
         #pygame.draw.rect()
