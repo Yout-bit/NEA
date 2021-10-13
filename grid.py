@@ -2,10 +2,14 @@ import pygame
 import math
 import random
 
+from pygame import display
+
+block = pygame.image.load(r'B.png')
 
 class Grid():
-    def __init__(self, map, tile_width):
+    def __init__(self, map, tile_width, display):
         self.tile_width = tile_width
+        self.display = display
         self.map = self.initailise_map(map)
 
     def get_grid_value(self, xy):
@@ -32,3 +36,5 @@ class Grid():
                     x = row * self.tile_width
                     y = column * self.tile_width
                     pygame.draw.rect(surface, (0, 0, 0), (x, y ,self.tile_width, self.tile_width))
+                    self.display.blit(block, (x,y))
+                    

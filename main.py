@@ -29,7 +29,7 @@ Colours = {
 
 #Establishing functions
 def map():
-    map_choice = random.randint(7,7)
+    map_choice = random.randint(0,7)
     if map_choice == 0:
         MAP = "##########-------##-###-#-##-----#-##-###-#-##-------##-#-###-##-#-----##-#-###-##-------##########"
     elif map_choice == 1:
@@ -51,7 +51,7 @@ def map():
 def setup():
     MAP = map()
     TILE_WIDTH = math.sqrt((SCREEN_HEIGHT * SCREEN_WIDTH) /  len(MAP)) 
-    level = Grid(MAP, TILE_WIDTH)
+    level = Grid(MAP, TILE_WIDTH, DISPLAYSURF)
     P1 = Player(TILE_WIDTH, 5, TILE_WIDTH, TILE_WIDTH, level, [pygame.K_w, pygame.K_s, pygame.K_a, pygame.K_d, pygame.K_q], "1", (174, 137, 218))
     P2 = Player(TILE_WIDTH, 5, (9) * TILE_WIDTH, (7) * TILE_WIDTH, level, [pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_SPACE], "2", (124, 227, 228))
     S1 = Projectile(15, P1, level, (0, 0, 0))
@@ -98,6 +98,7 @@ P1Score = P2Score = 0
 winner = "NEW GAME"
 
 image = pygame.image.load(r'Tank Attack.png')
+background = pygame.image.load(r'B3.png')
 
 def Text(size):
     return pygame.font.SysFont('didot.ttc', size)
@@ -109,6 +110,8 @@ while True:
 
         pygame.display.update()
         DISPLAYSURF.fill(Colours["GREY"])
+        DISPLAYSURF.blit(background, (0,0))
+
 
         if pygame.key.get_pressed()[pygame.K_q]:
             P1ready = True
@@ -148,11 +151,9 @@ while True:
         DISPLAYSURF.blit(Text(50).render(str(P1Score), True, Colours["BLACK"]), (63, 770))
         DISPLAYSURF.blit(Text(50).render(str(P2Score), True, Colours["BLACK"]), (115, 770))
 
-        #image.set_colorkey((246,117,112))
-        x = wait * 8
-        DISPLAYSURF.blit(image, (760,550))
-        for i in range(10):
-            pygame.draw.circle(DISPLAYSURF,(246 - i * 9.3, 117 + i * 5.3, 112 + i * 6.9), (955, 750), 150, 10-i,)
+        #DISPLAYSURF.blit(image, (760,550))
+        #for i in range(10):
+        #    pygame.draw.circle(DISPLAYSURF,(246 - i * 9.3, 117 + i * 5.3, 112 + i * 6.9), (955, 750), 150, 10-i,)
 
         if COUNTDOWN == 0: 
             game = "playing"
