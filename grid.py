@@ -1,5 +1,6 @@
 import pygame
 import math
+import random
 
 
 class Grid():
@@ -15,17 +16,13 @@ class Grid():
         row = []
         fmap = []
         Counter = 0
-        #print (self.tile_width)
         for charecter in map:
-            #print(charecter, Counter)
             Counter += 1
             row.append(charecter)
             if Counter == (900 / self.tile_width):
-                #print("new row")
                 fmap.append(row)
                 row = []
                 Counter = 0
-        print(fmap)
         return fmap
     
     def draw(self, surface):

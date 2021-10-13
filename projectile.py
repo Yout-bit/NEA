@@ -48,3 +48,4 @@ class Projectile():
     def draw(self, surface):
         if self.motion:
             pygame.draw.circle(surface, self.colour, (int(self.center.x), int(self.center.y)), 20)
+

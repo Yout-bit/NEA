@@ -1,4 +1,5 @@
 from random import normalvariate
+import random
 import pygame
 from pygame.locals import *
 import math
