@@ -96,8 +96,6 @@ P1ready = P2ready = False
 P1Wines = []
 P1Score = P2Score = 0
 winner = "NEW GAME"
-cornor = 1
-wait = 0
 
 image = pygame.image.load(r'Tank Attack.png')
 
@@ -151,22 +149,11 @@ while True:
         DISPLAYSURF.blit(Text(50).render(str(P2Score), True, Colours["BLACK"]), (115, 770))
 
         #image.set_colorkey((246,117,112))
+        x = wait * 8
         DISPLAYSURF.blit(image, (760,550))
-        if cornor % 4 == 0:
-            pygame.draw.circle(DISPLAYSURF,(143, 160, 171), (955, 750), 150, 10, True)
-        elif cornor % 4 == 1:
-            pygame.draw.circle(DISPLAYSURF,(143, 160, 171), (955, 750), 150, 10, False, True)
-        elif cornor % 4 == 2:
-            pygame.draw.circle(DISPLAYSURF,(143, 160, 171), (955, 750), 150, 10, False, False, True)
-        elif cornor % 4 == 3:
-            pygame.draw.circle(DISPLAYSURF,(143, 160, 171), (955, 750), 150, 10, False, False, False, True)
+        for i in range(10):
+            pygame.draw.circle(DISPLAYSURF,(246 - i * 9.3, 117 + i * 5.3, 112 + i * 6.9), (955, 750), 150, 10-i,)
 
-        wait += 1
-        if wait == 30:
-            cornor += 1
-            wait = 0
-
-        print (wait, cornor)
         if COUNTDOWN == 0: 
             game = "playing"
 
