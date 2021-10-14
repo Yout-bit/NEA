@@ -91,14 +91,13 @@ DISPLAYSURF = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Game")
 
 P1, P2, S1, S2, level, P1text, P2text = setup()
-COUNTDOWN = FPS * 5
+COUNTDOWN = FPS * 5 * 0 + 1
 P1ready = P2ready = False
 P1Wines = []
 P1Score = P2Score = 0
 winner = "NEW GAME"
 
-image = pygame.image.load(r'Tank Attack.png')
-background = pygame.image.load(r'B3.png')
+background = pygame.image.load(r'Images/Background.png')
 
 def Text(size):
     return pygame.font.SysFont('didot.ttc', size)
@@ -169,12 +168,12 @@ while True:
         S1.update()
         S2.update()
 
-
+        level.draw(DISPLAYSURF)
         S1.draw(DISPLAYSURF)
         S2.draw(DISPLAYSURF)
         P1.draw(DISPLAYSURF)
         P2.draw(DISPLAYSURF)
-        level.draw(DISPLAYSURF)
+
 
 
         P2_winner = check_hit(P1, S2)
