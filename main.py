@@ -1,5 +1,6 @@
 import sys
 import pygame
+from pygame.font import match_font
 from pygame.key import *
 from pygame.locals import *
 import math
@@ -29,7 +30,7 @@ Colours = {
 
 #Establishing functions
 def map():
-    map_choice = random.randint(0,7)
+    map_choice = random.randint(7,7)
     if map_choice == 0:
         MAP = "##########-------##-###-#-##-----#-##-###-#-##-------##-#-###-##-#-----##-#-###-##-------##########"
     elif map_choice == 1:
@@ -52,7 +53,8 @@ def setup():
     MAP = map()
     TILE_WIDTH = math.sqrt((SCREEN_HEIGHT * SCREEN_WIDTH) /  len(MAP)) 
     level = Grid(MAP, TILE_WIDTH, DISPLAYSURF)
-    P1 = Player(TILE_WIDTH, 5, TILE_WIDTH, TILE_WIDTH, level, [pygame.K_w, pygame.K_s, pygame.K_a, pygame.K_d, pygame.K_q], "1", (174, 137, 218))
+    P1 = Player(TILE_WIDTH, 5
+    , TILE_WIDTH, TILE_WIDTH, level, [pygame.K_w, pygame.K_s, pygame.K_a, pygame.K_d, pygame.K_q], "1", (174, 137, 218))
     P2 = Player(TILE_WIDTH, 5, (9) * TILE_WIDTH, (7) * TILE_WIDTH, level, [pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_SPACE], "2", (124, 227, 228))
     S1 = Projectile(15, P1, level, (0, 0, 0))
     S2 = Projectile(15, P2, level, (0, 255, 0))
@@ -78,8 +80,8 @@ pygame.init()
 FPS = 60
 FramePerSec = pygame.time.Clock()
 
-SCREEN_WIDTH = 1100
-SCREEN_HEIGHT = 900
+SCREEN_WIDTH = 880
+SCREEN_HEIGHT = 720
 
 #DISPLAYSURF = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), DOUBLEBUF|OPENGL)
 DISPLAYSURF = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -91,16 +93,32 @@ DISPLAYSURF = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Game")
 
 P1, P2, S1, S2, level, P1text, P2text = setup()
-COUNTDOWN = FPS * 5 * 0 + 1
+COUNTDOWN = FPS * 5 *0 +1
+
 P1ready = P2ready = False
 P1Wines = []
 P1Score = P2Score = 0
 winner = "NEW GAME"
 
-background = pygame.image.load(r'Images/Background.png')
+#background = pygame.image.load(r'Images/Background.png')
 
 def Text(size):
     return pygame.font.SysFont('didot.ttc', size)
+
+for i in range(0, 255 * 3, 3):
+    for j in range(0, 255 * 3, 3):
+        DISPLAYSURF.set_at((i,j),  (i/3 % 255, j/3 % 255, (i/3)*(j/3) % 255))
+        DISPLAYSURF.set_at((i+1,j),  (i/3 % 255, j/3 % 255, (i/3)*(j/3) % 255))
+        DISPLAYSURF.set_at((i,j+1),  (i/3 % 255, j/3 % 255, (i/3)*(j/3) % 255))
+        DISPLAYSURF.set_at((i+1,j+1),  (i/3 % 255, j/3 % 255, (i/3)*(j/3) % 255))
+Col = pygame.Surface((255,255))
+for i in range(255):
+    for j in range(255):
+        Col.set_at((i,j),  (math.sin(i^j)*math.sin(j^i) % 255, math.cos(j^i)*math.cos(i^j) % 255, math.tan(i^j) * math.tan(j^i) % 255))
+        #pygame.draw.rect(DISPLAYSURF, (i % 255, j % 255, i*j % 255), (i ,j, 3 * i,3 * j))
+pygame.image.save(Col, "Colours.png")
+
+pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 #Main loop
 game = "start"
@@ -108,8 +126,8 @@ while True:
     if game == "start":
 
         pygame.display.update()
-        DISPLAYSURF.fill(Colours["GREY"])
-        DISPLAYSURF.blit(background, (0,0))
+        #DISPLAYSURF.fill(Colours["GREY"])
+        #DISPLAYSURF.blit(background, (0,0))
 
 
         if pygame.key.get_pressed()[pygame.K_q]:
@@ -125,34 +143,32 @@ while True:
                  DISPLAYSURF.blit(Text(250).render(str(COUNTDOWN // FPS + 1), True, ((51*i)/50, (17*i)/15, (181*i)/150)), (SCREEN_WIDTH //2  - 50 + i/10, SCREEN_HEIGHT // 2 - 10 + i/10 ))
 
 
-        DISPLAYSURF.blit(Text(140).render(P1text, True, Colours["SHADOW"]), (53, 178))
-        DISPLAYSURF.blit(Text(140).render(P2text, True, Colours["SHADOW"]), (53, 278))
-        DISPLAYSURF.blit(Text(140).render(winner, True, Colours["SHADOW"]), (53, 53))
-        DISPLAYSURF.blit(Text(140).render(P1text, True, Colours["BLACK"]), (50, 175))
-        DISPLAYSURF.blit(Text(140).render(P2text, True, Colours["BLACK"]), (50, 275))
-        DISPLAYSURF.blit(Text(140).render(winner, True, Colours["BLACK"]), (50, 50))
+        DISPLAYSURF.blit(Text(112).render(P1text, True, Colours["SHADOW"]), (43, 123))
+        DISPLAYSURF.blit(Text(112).render(P2text, True, Colours["SHADOW"]), (43, 203))
+        DISPLAYSURF.blit(Text(112).render(winner, True, Colours["SHADOW"]), (43, 43))
+        DISPLAYSURF.blit(Text(112).render(P1text, True, Colours["BLACK"]), (40, 120))
+        DISPLAYSURF.blit(Text(112).render(P2text, True, Colours["BLACK"]), (40, 200))
+        DISPLAYSURF.blit(Text(112).render(winner, True, Colours["BLACK"]), (40, 40))
 
-        DISPLAYSURF.blit(Text(50).render("Scores:", True, Colours["BLACK"]), (50, 515)) 
-        DISPLAYSURF.blit(Text(50).render("P1", True, Colours["SHADOW"]), (56, 561))       
-        DISPLAYSURF.blit(Text(50).render("P2", True, Colours["SHADOW"]), (107, 561))
-        DISPLAYSURF.blit(Text(50).render("P1", True, (174, 137, 218)), (55, 560))        
-        DISPLAYSURF.blit(Text(50).render("P2", True, (124, 227, 228)), (106, 560))
-        for i in range(0,54,53):
-            pygame.draw.rect(DISPLAYSURF, Colours["BLACK"], (50 + i, 605, 50, 160), 5)
+        DISPLAYSURF.blit(Text(40).render("Scores:", True, Colours["SHADOW"]), (42, 414)) 
+        DISPLAYSURF.blit(Text(40).render("Scores:", True, Colours["BLACK"]), (40, 412)) 
+        DISPLAYSURF.blit(Text(40).render("P1", True, Colours["SHADOW"]), (47, 452))       
+        DISPLAYSURF.blit(Text(40).render("P2", True, Colours["SHADOW"]), (88, 452))
+        DISPLAYSURF.blit(Text(40).render("P1", True, (174, 137, 218)), (45, 450))        
+        DISPLAYSURF.blit(Text(40).render("P2", True, (124, 227, 228)), (86, 450))
+        for i in range(0,44,42):
+            pygame.draw.rect(DISPLAYSURF, Colours["BLACK"], (40 + i, 484, 40, 128), 4)
             for j in range(0,5):
                 try:
-                    if P1Wines[j] != (i == 53):
-                        DISPLAYSURF.blit(Text(40).render("W", True, Colours["BLACK"]), (60 + i, 610 + j  * 30))
+                    if P1Wines[j] != (i == 42):
+                        DISPLAYSURF.blit(Text(32).render("W", True, Colours["BLACK"]), (48 + i , 488 + j  * 24))
                     else:
-                            DISPLAYSURF.blit(Text(40).render("L", True, Colours["BLACK"]), (65 + i, 610 + j * 30))
+                            DISPLAYSURF.blit(Text(32).render("L", True, Colours["BLACK"]), (52 + i, 488 + j * 24))
                 except IndexError:
                     pass
-        DISPLAYSURF.blit(Text(50).render(str(P1Score), True, Colours["BLACK"]), (63, 770))
-        DISPLAYSURF.blit(Text(50).render(str(P2Score), True, Colours["BLACK"]), (115, 770))
+        DISPLAYSURF.blit(Text(40).render(str(P1Score), True, Colours["BLACK"]), (50, 616))
+        DISPLAYSURF.blit(Text(40).render(str(P2Score), True, Colours["BLACK"]), (95, 616))
 
-        #DISPLAYSURF.blit(image, (760,550))
-        #for i in range(10):
-        #    pygame.draw.circle(DISPLAYSURF,(246 - i * 9.3, 117 + i * 5.3, 112 + i * 6.9), (955, 750), 150, 10-i,)
 
         if COUNTDOWN == 0: 
             game = "playing"
@@ -168,7 +184,7 @@ while True:
         S1.update()
         S2.update()
 
-        level.draw(DISPLAYSURF)
+        level.draw()
         S1.draw(DISPLAYSURF)
         S2.draw(DISPLAYSURF)
         P1.draw(DISPLAYSURF)

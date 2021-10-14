@@ -46,7 +46,7 @@ class Player(pygame.sprite.Sprite):
             if (centers.index(i) != (int(self.name)-1)):
                 i = Vector2(i)
                 difference = Vector2((i.x - self.rect.centerx), (i.y - self.rect.centery))
-                if (abs(difference.x) <= 100 and abs(difference.y == 0))  or (abs(difference.y) <=100 and abs(difference.x == 0)):
+                if (abs(difference.x) <= 80 and abs(difference.y == 0))  or (abs(difference.y) <=80 and abs(difference.x == 0)):
                     if not self.detect_collision(self.dir):
                         self.dir = difference.normalize() * -1
 
@@ -93,10 +93,10 @@ class Player(pygame.sprite.Sprite):
         backrect = None
         if self.dir != (0,0):
             backrect = self.rect.copy()
-            backrect.width -= (abs(self.dir.x) * 85)
-            backrect.height -= (abs(self.dir.y) *85)
-            backrect.top += 85 * (abs(self.dir.y) - self.dir.y) / 2 
-            backrect.left += 85 * (abs(self.dir.x) - self.dir.x) / 2
+            backrect.width -= (abs(self.dir.x) * 64)
+            backrect.height -= (abs(self.dir.y) *64)
+            backrect.top += 64 * (abs(self.dir.y) - self.dir.y) / 2 
+            backrect.left += 64 * (abs(self.dir.x) - self.dir.x) / 2
         return backrect
     
     
