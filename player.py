@@ -8,7 +8,7 @@ from pygame.math import Vector2
 centers = [Vector2(0,0), Vector2(0,0)]
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, size, move_speed, start_x, start_y, level, inp_moves, name, colour):
+    def __init__(self, size, move_speed, start_x, start_y, level, inp_moves, name):
         super().__init__()
         self.dir = Vector2(0,0)
         self.wish_dir = Vector2()
@@ -17,7 +17,6 @@ class Player(pygame.sprite.Sprite):
         self.moves = inp_moves
         self.size = int(size)
         self.name = name
-        self.colour = colour
         self.surf = pygame.Surface((size, size))
         self.rect = self.surf.get_rect()
         self.rect = Rect(start_x, start_y, size, size)
@@ -51,23 +50,24 @@ class Player(pygame.sprite.Sprite):
                         self.dir = difference.normalize() * -1
 
     #Assigns the wish diretion based on the input and checks if the player fires
-    def input(self):
-        pressed_keys = pygame.key.get_pressed()
-        self.wish_dir = Vector2(1,0) if pressed_keys[self.moves[3]] else self.wish_dir
-        self.wish_dir = Vector2(-1,0) if pressed_keys[self.moves[2]] else self.wish_dir
+    def input(self, inputs):
+        self.wish_dir = Vector2(1,0) if inputs[1] == "1" else self.wish_dir
+        self.wish_dir = Vector2(-1,0) if inputs[3] == "1"else self.wish_dir
 
-        self.wish_dir = Vector2(0,1) if pressed_keys[self.moves[1]] else self.wish_dir
-        self.wish_dir = Vector2(0,-1) if pressed_keys[self.moves[0]] else self.wish_dir
+        self.wish_dir = Vector2(0,1) if inputs[2] == "1" else self.wish_dir
+        self.wish_dir = Vector2(0,-1) if inputs[0] == "1" else self.wish_dir
         if self.wish_dir.magnitude() != 0:
             self.wish_dir.normalize_ip()
 
-        self.fire = pressed_keys[self.moves[4]]      
+        self.fire = False 
+        if inputs[4] == "1":
+            self.fire = True     
 
 
     #Normalise the direction vector then checks the wish direction doesnt push the player into a wall and is not opposite to the current direction. Then tests for collision with other player
-    def update(self):
+    def update(self, inputs):
         centers[int(self.name)-1] = self.rect.center
-        self.input()
+        self.input(inputs)
         if self.dir.magnitude() != 0:
             normal_dir = self.dir.normalize()
         else:
