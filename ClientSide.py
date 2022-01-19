@@ -162,7 +162,7 @@ while True:
 
     ClientSocket.send(str.encode(get_inputs()))
     Response = ClientSocket.recv(1024).decode('utf-8')
-
+    print(Response)
     if Response[0] == "1":
         if int(Response[2]) != mapnum:
             mapnum = int(Response[2])

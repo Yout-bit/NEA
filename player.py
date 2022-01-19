@@ -8,13 +8,12 @@ from pygame.math import Vector2
 centers = [Vector2(0,0), Vector2(0,0)]
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, size, move_speed, start_x, start_y, level, inp_moves, name):
+    def __init__(self, size, move_speed, start_x, start_y, level, name):
         super().__init__()
         self.dir = Vector2(0,0)
         self.wish_dir = Vector2()
         self.level = level
         self.move_speed = move_speed
-        self.moves = inp_moves
         self.size = int(size)
         self.name = name
         self.surf = pygame.Surface((size, size))
@@ -87,6 +86,10 @@ class Player(pygame.sprite.Sprite):
     #Returns the front point of the player (Used for projectile starting pos) 
     def get_front(self):
         return (self.rect.center + self.dir * (self.size / 2))
+
+    #
+    def get_pos(self):
+        return str(self.rect.left) + str(self.rect.top)
 
     #Returns a Rect object that is the hitbox
     def get_hitbox(self):

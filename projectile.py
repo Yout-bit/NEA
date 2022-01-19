@@ -1,3 +1,4 @@
+import re
 import pygame
 from pygame.math import Vector2 
 
@@ -40,6 +41,12 @@ class Projectile():
                 self.destroy()
             else:
                 self.center = self.next_move
+
+
+
+
+    def get_pos(self):
+        return str(self.center.x) + str(self.center.y)
             
 
 

@@ -53,6 +53,7 @@ def map():
     return MAP
 
 def setup():
+    DISPLAYSURF = 1
     MAP = map()
     TILE_WIDTH = math.sqrt((SCREEN_HEIGHT * SCREEN_WIDTH) /  len(MAP)) 
     level = Grid(MAP, TILE_WIDTH, DISPLAYSURF)
@@ -76,7 +77,10 @@ def check_hit(player, projectile):
             return False
 
 
-P1, P2, S1, S2, level, P1text, P2text = setup()
+#P1, P2, S1, S2, level, P1text, P2text = setup()
+MAP = map()
+DISPLAYSURF = 1
+level = Grid(MAP, 80, DISPLAYSURF)
 COUNTDOWN = 60 * 5 
 
 P1ready = P2ready = False
@@ -98,25 +102,41 @@ except socket.error as e:
 
 print('Waitiing for a Connection..')
 ServerSocket.listen(5)
+players = []
+shots = []
 
-
-def threaded_client(connection):
+def threaded_client(connection, number):
     global output
     connection.send(str.encode('Welcome to the Servern'))
     while True:
         data = connection.recv(2048)
         reply = data.decode('utf-8')
-        P1.update(reply)
+        for player in players:
+            if player.name == number:
+                player.update(reply)
         if not data:
             break
         connection.sendall(str.encode(output))
     connection.close()
 
+def threaded_main():
+    global output    
+    while True:
+        output = "121"
+        for i in range(len(players)):
+            output += players[i].get_pos()
+            output += shots[i].get_pos()
+
+start_new_thread(threaded_main, ())
+
+ThreadCount = 0
 while True:
 
     Client, address = ServerSocket.accept()
     print('Connected to: ' + address[0] + ':' + str(address[1]))
-    start_new_thread(threaded_client, (Client, ))
+    start_new_thread(threaded_client, (Client, str(ThreadCount)))
+    players.append(Player(80, 5, 80, 80, level, str(ThreadCount)))
+    shots.append(Projectile(15, players[ThreadCount], level, (0, 0, 0)))
     ThreadCount += 1
     print('Thread Number: ' + str(ThreadCount))
 
