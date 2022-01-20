@@ -38,37 +38,19 @@ def setup():
     return P1, P2, S1, S2, level, P1text, P2text
 
 
-
-
-def draw_menu(P1text, P2text, winner, P1Score, P2Score, COUNTDOWN):
-    DISPLAYSURF.blit(Text(112).render(P1text, True, Colours["SHADOW"]), (43, 123))
-    DISPLAYSURF.blit(Text(112).render(P2text, True, Colours["SHADOW"]), (43, 203))
-    DISPLAYSURF.blit(Text(112).render(winner, True, Colours["SHADOW"]), (43, 43))
-    DISPLAYSURF.blit(Text(112).render(P1text, True, Colours["BLACK"]), (40, 120))
-    DISPLAYSURF.blit(Text(112).render(P2text, True, Colours["BLACK"]), (40, 200))
-    DISPLAYSURF.blit(Text(112).render(winner, True, Colours["BLACK"]), (40, 40))
-
-    DISPLAYSURF.blit(Text(40).render("Scores:", True, Colours["SHADOW"]), (42, 414)) 
-    DISPLAYSURF.blit(Text(40).render("Scores:", True, Colours["BLACK"]), (40, 412)) 
-    DISPLAYSURF.blit(Text(40).render("P1", True, Colours["SHADOW"]), (47, 452))       
-    DISPLAYSURF.blit(Text(40).render("P2", True, Colours["SHADOW"]), (88, 452))
-    DISPLAYSURF.blit(Text(40).render("P1", True, (174, 137, 218)), (45, 450))        
-    DISPLAYSURF.blit(Text(40).render("P2", True, (124, 227, 228)), (86, 450))
-    for i in range(0,44,42):
-        pygame.draw.rect(DISPLAYSURF, Colours["BLACK"], (40 + i, 484, 40, 128), 4)
-        for j in range(0,5):
-            try:
-                if P1Wines[j] != (i == 42):
-                    DISPLAYSURF.blit(Text(32).render("W", True, Colours["BLACK"]), (48 + i , 488 + j  * 24))
-                else:
-                    DISPLAYSURF.blit(Text(32).render("L", True, Colours["BLACK"]), (52 + i, 488 + j * 24))
-            except IndexError:
-                pass
-    DISPLAYSURF.blit(Text(40).render(str(P1Score), True, Colours["BLACK"]), (50, 616))
-    DISPLAYSURF.blit(Text(40).render(str(P2Score), True, Colours["BLACK"]), (95, 616))
-    if COUNTDOWN != 5*60:
-        for i in range(150, 0, -10):
-            DISPLAYSURF.blit(Text(250).render(str(COUNTDOWN // FPS + 1), True, ((51*i)/50, (17*i)/15, (181*i)/150)), (SCREEN_WIDTH //2  - 50 + i/10, SCREEN_HEIGHT // 2 - 10 + i/10 ))
+def shadow_text(size, text, loc, disp)
+    x, y = loc
+    DISPLAYSURF.blit(Text(size).render(text, True, Colours["SHADOW"]), (x + disp, y + disp))
+    DISPLAYSURF.blit(Text(size).render(text, True, Colours["BLACK"]), loc)
+    
+def draw_menu(response):
+    shadow_text(112, "NEW GAME", (40, 40), 3)
+    for i in range(int(response[1])):
+        readys = response[2:2 + int(response[1])]
+        if readys[i] == "0": 
+            shadow_text(112, "P" + str(i+1) + " press space", (40, 120 + i*85), 3)
+        else:
+            shadow_text(112, "P" + str(i+1) + " is ready", (40, 120 + i*85), 3)
 
 def Text(size):
     return pygame.font.SysFont('didot.ttc', size)
@@ -113,6 +95,8 @@ def draw_players(locs):
     for i in range(len(locs)):
         player = pygame.Rect((locs[i][0], locs[i][1]), (80,80))
         pygame.draw.rect(DISPLAYSURF, (30 * (i+1), 50 * (i+1), 70 * (i+1)), player)
+              
+   
 
 pygame.init()
 FPS = 60
@@ -126,10 +110,10 @@ pygame.display.set_caption("Game")
 #P1, P2, S1, S2, level, P1text, P2text = setup()
 COUNTDOWN = FPS * 5 
 
-P1ready = P2ready = False
-P1Wines = []
-P1Score = P2Score = 0
-winner = "NEW GAME"
+#1ready = P2ready = False
+#P1Wines = []
+#P1Score = P2Score = 0
+#winner = "NEW GAME"
 
 background = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
 background.fill(Colours["GREY"])
@@ -156,13 +140,9 @@ while True:
     pygame.display.update()
     DISPLAYSURF.fill(Colours["GREY"])
     #DISPLAYSURF.blit(background, (0,0))
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
 
     ClientSocket.send(str.encode(get_inputs()))
     Response = ClientSocket.recv(1024).decode('utf-8')
-    print(Response)
     if Response[0] == "1":
         if int(Response[2]) != mapnum:
             mapnum = int(Response[2])
@@ -175,7 +155,9 @@ while True:
             pygame.draw.circle(DISPLAYSURF, [0, 0, 0], (int(Response[9 + (12 * i):12 + (12 * i)]), int(Response[12 + (12 * i):15 + (12 * i)])), 16)
 
         draw_players(playerlocs)
-
+    else:
+        draw_menu(P1text, P2text, winner, P1Score, P2Score, COUNTDOWN):
+        
 
         
 
@@ -185,9 +167,9 @@ while True:
 
 
 
-
-    DISPLAYSURF.blit(Text(40).render(Response, True, Colours["BLACK"]), (50, 50))
-    DISPLAYSURF.blit(Text(40).render(Response, True, Colours["BLACK"]), (50, 100))
     FramePerSec.tick(FPS)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
 
 ClientSocket.close()
