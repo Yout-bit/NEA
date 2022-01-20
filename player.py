@@ -87,7 +87,7 @@ class Player(pygame.sprite.Sprite):
     def get_front(self):
         return (self.rect.center + self.dir * (self.size / 2))
 
-    #
+    #Returns position of the player
     def get_pos(self):
         return str(self.rect.left) + str(self.rect.top)
 
@@ -103,8 +103,3 @@ class Player(pygame.sprite.Sprite):
         return backrect
     
     
-    def draw(self,surface):
-        pygame.draw.rect(surface, self.colour, self.rect)
-        backrect = self.get_hitbox()
-        if backrect != None:
-            pygame.draw.rect(surface, (255, 47, 51), backrect)
