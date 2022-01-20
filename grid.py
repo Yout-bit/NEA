@@ -36,10 +36,6 @@ class Grid():
         self.create_image_map()
 
 
-    def get_grid_value(self, xy):
-        x , y = xy
-        return self.map[math.floor(x / self.tile_width)][math.floor(y / self.tile_width)]
-
     def initailise_map(self, map):
         row = []
         fmap = []
