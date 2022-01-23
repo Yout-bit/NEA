@@ -1,3 +1,4 @@
+from asyncore import read
 import socket
 import os
 from _thread import *
@@ -30,21 +31,16 @@ Colours = {
     }
 
 
-def setup():
-    DISPLAYSURF = 1
-    MAP = map()
-    TILE_WIDTH = math.sqrt((SCREEN_HEIGHT * SCREEN_WIDTH) /  len(MAP)) 
-    level = Collisions(MAP, TILE_WIDTH, DISPLAYSURF)
+def setup(players, shots):
+    mapnum = random.randint(0,7)
+    level = Collisions(mapnum)
     for player in  players:
-        player
+        player.reset()
+    for shot in shots:
+        shot.destroy()
+        shot.countdown = 0
 
-    P1 = Player(TILE_WIDTH, 5, TILE_WIDTH, TILE_WIDTH, level, [pygame.K_w, pygame.K_s, pygame.K_a, pygame.K_d, pygame.K_q], "1")
-    P2 = Player(TILE_WIDTH, 5, (9) * TILE_WIDTH, (7) * TILE_WIDTH, level, [pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_SPACE], "2")
-    S1 = Projectile(15, P1, level, (0, 0, 0))
-    S2 = Projectile(15, P2, level, (0, 255, 0))
-    P1text = "P1 press q"
-    P2text = "P2 press space"
-    return P1, P2, S1, S2, level, P1text, P2text
+    return level, players, shots
 
 def check_hit(player, projectile):
     hitbox = player.get_hitbox()
@@ -52,11 +48,8 @@ def check_hit(player, projectile):
         if hitbox.collidepoint(projectile.center):
             projectile.destroy()
             player.destroy()
-            return True
         elif player.rect.collidepoint(projectile.center):
             projectile.destroy()
-        else:
-            return False
 
 def create_player(players, number):
     if number == 0:
@@ -76,19 +69,13 @@ def threefigs(number):
     return number
 
 
-#P1, P2, S1, S2, level, P1text, P2text = setup()
-DISPLAYSURF = 1
 mapnum = random.randint(0,7)
 level = Collisions(mapnum)
-COUNTDOWN = 60 * 5 
+players = []
+shots = []
 
-P1ready = P2ready = False
-P1Wines = []
-P1Score = P2Score = 0
-
-#Data to send to cliants
+#Data to send to cliants:
 #[Game State(Menu/Game - 0/1), NumOfPlayers, Map, P1pos, S1pos rept for all players]
-output = "121080080200120720560999999"
 
 ServerSocket = socket.socket()
 host = '127.0.0.1'
@@ -101,8 +88,6 @@ except socket.error as e:
 
 print('Waitiing for a Connection..')
 ServerSocket.listen(5)
-players = []
-shots = []
 
 def threaded_client(connection, number):
     global output
@@ -121,14 +106,34 @@ def threaded_client(connection, number):
 
 def threaded_main():
     global output
+    game = "Menu"
+
     while True:
-        x = "1" + str(len(players)) + str(mapnum)
-        for i in range(len(players)):
-            for j in range(len(shots)):
-                if i != j:
-                    check_hit(players[i], shots[j])
-            for j in (players[i].get_pos() + shots[i].get_pos()):
-                x += threefigs(j)
+        if game == "Menu":
+            x = "0" + str(len(players)) + str(mapnum)
+            ready = 0
+            for player in players:
+                if player.ready:
+                    x += "1"
+                    ready += 1 
+                else:
+                    x += "0"
+            game = "Playing" if ready == len(players) else game
+            
+        if game == "Playing":
+            dead = 0
+            x = "1" + str(len(players)) + str(mapnum)
+            for i in range(len(players)):
+                if players[i].dead:
+                    dead += 1 
+                for j in range(len(shots)):
+                    if i != j:
+                        check_hit(players[i], shots[j])
+                for j in (players[i].get_pos() + shots[i].get_pos()):
+                    x += threefigs(j)
+            if dead == len(players) - 1:
+                setup(players, shots)
+                game = "Menu"
         output = x
 
 

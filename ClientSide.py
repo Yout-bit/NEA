@@ -31,8 +31,10 @@ def shadow_text(size, text, loc, disp):
     
 def draw_menu(response):
     shadow_text(112, "NEW GAME", (40, 40), 3)
+    readys = response[3:3 + int(response[1])]
+    print (response, readys)
     for i in range(int(response[1])):
-        readys = response[2:2 + int(response[1])]
+        #print (readys[i])
         if readys[i] == "0": 
             shadow_text(112, "P" + str(i+1) + " press space", (40, 120 + i*85), 3)
         else:
@@ -129,26 +131,22 @@ while True:
 
     ClientSocket.send(str.encode(get_inputs()))
     Response = ClientSocket.recv(1024).decode('utf-8')
-    print(Response)
-    if len(Response) == (3 + int(Response[1]) * 12):
-        if Response[0] == "1":
-            if int(Response[2]) != mapnum:
-                print ("maping")
-                mapnum = int(Response[2])
-                level = set_up_map(mapnum)
-            level.draw()
+    #print(Response)
+    if Response[0] == "1" and len(Response) == (3 + int(Response[1]) * 12):
+        if int(Response[2]) != mapnum:
+            mapnum = int(Response[2])
+            level = set_up_map(mapnum)
+        level.draw()
 
-            playerlocs = []
-            for i in range(int(Response[1])):
-                #print(Response)
-                #print (Response[3 + (12 * i):6 + (12 * i)], Response[3 + (12 * i):6 + (12 * i)] )
-                playerlocs.append([int(Response[3 + (12 * i):6 + (12 * i)]), int(Response[6 + (12 * i):9 + (12 * i)])])
-                pygame.draw.circle(DISPLAYSURF, [0, 0, 0], (int(Response[9 + (12 * i):12 + (12 * i)]), int(Response[12 + (12 * i):15 + (12 * i)])), 16)
+        playerlocs = []
+        for i in range(int(Response[1])):
+            playerlocs.append([int(Response[3 + (12 * i):6 + (12 * i)]), int(Response[6 + (12 * i):9 + (12 * i)])])
+            pygame.draw.circle(DISPLAYSURF, [0, 0, 0], (int(Response[9 + (12 * i):12 + (12 * i)]), int(Response[12 + (12 * i):15 + (12 * i)])), 16)
 
-            draw_players(playerlocs)
+        draw_players(playerlocs)
             
-        else:
-            draw_menu(Response)
+    else:
+        draw_menu(Response)
         
 
         

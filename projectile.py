@@ -25,6 +25,10 @@ class Projectile():
         if self.cooldown > 0:
             self.cooldown -= 1
             return
+        #Catches any errors of stationary projectiles 
+        if self.dir.magnitude() == 0:
+            self.destroy()
+
         #When the fire button is first pressed and the projectile is not already in motion
         if self.player.fire and not self.motion:
             self.center = self.player.get_front()
@@ -34,7 +38,7 @@ class Projectile():
                 self.dir = self.player.dir 
             else:
                 self.motion = False
-        #Movement - finds next posyion and checks it is not a wall, then either destroys iteslef or moves accordingly 
+        #Movement - finds next position and checks it is not a wall, then either destroys iteslef or moves accordingly 
         if self.motion:
             self.next_move = self.center + (self.dir * self.speed)
             if self.level.get_grid_value(self.next_move) == "#":

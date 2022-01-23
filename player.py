@@ -16,12 +16,14 @@ class Player(pygame.sprite.Sprite):
         self.move_speed = move_speed
         self.size = int(size)
         self.name = str(name)
-        self.surf = pygame.Surface((size, size))
-        self.rect = self.surf.get_rect()
+        self.rect = pygame.Surface((size, size)).get_rect()
+        self.startx = start_x
+        self.starty = start_y
         self.rect = Rect(start_x, start_y, size, size)
         self.fire = False
         self.bonk = 0
         self.dead = False
+        self.ready = False
 
 
     #Checks whether the player can be moved by the input vector
@@ -61,8 +63,8 @@ class Player(pygame.sprite.Sprite):
 
         self.fire = False 
         if inputs[4] == "1":
-            print ("fire" + str(self.name))
-            self.fire = True  
+            self.fire = True
+            self.ready = True
 
 
     #Normalise the direction vector then checks the wish direction doesnt push the player into a wall and is not opposite to the current direction. Then tests for collision with other player
@@ -81,6 +83,10 @@ class Player(pygame.sprite.Sprite):
             self.detect_player()
             if not self.detect_collision(self.dir):
                 self.rect.move_ip(self.dir * self.move_speed)
+
+    def reset(self):
+        self.ready = False
+        self.rect.move_ip(self.startx - self.rect.left, self.starty - self.rect.top)
 
     def destroy(self):
         self.dead = True
