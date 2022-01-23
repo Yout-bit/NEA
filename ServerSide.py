@@ -48,7 +48,7 @@ def setup():
 
 def check_hit(player, projectile):
     hitbox = player.get_hitbox()
-    if hitbox != None:
+    if hitbox != None and not player.dead:
         if hitbox.collidepoint(projectile.center):
             projectile.destroy()
             player.destroy()

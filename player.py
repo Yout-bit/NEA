@@ -61,6 +61,7 @@ class Player(pygame.sprite.Sprite):
 
         self.fire = False 
         if inputs[4] == "1":
+            print ("fire" + str(self.name))
             self.fire = True  
 
 

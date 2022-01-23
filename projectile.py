@@ -14,7 +14,7 @@ class Projectile():
         self.motion = False
         self.cooldown = 0
 
-    #Removes the projectile, used if it hits a wall or the non hitbox area of a player
+    #Removes the projectile, used if it hits a wall or a player
     def destroy(self):
         self.center = Vector2(999, 999)
         self.cooldown = 30
@@ -42,17 +42,7 @@ class Projectile():
             else:
                 self.center = self.next_move
 
-
-
-
+    #Returns the projectile's position for the cliant to draw
     def get_pos(self):
         return self.center.x, self.center.y
             
-
-
-
-    #Draws itself onto the board
-    def draw(self, surface):
-        if self.motion:
-            pygame.draw.circle(surface, self.colour, (int(self.center.x), int(self.center.y)), 16)
-
