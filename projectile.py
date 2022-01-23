@@ -10,13 +10,13 @@ class Projectile():
         self.colour = colour
         self.dir = Vector2(0, 0)
         self.next_move = Vector2()
-        self.center = Vector2(0, 0)
+        self.center = Vector2(999, 999)
         self.motion = False
         self.cooldown = 0
 
     #Removes the projectile, used if it hits a wall or the non hitbox area of a player
     def destroy(self):
-        self.center = Vector2(0, 0)
+        self.center = Vector2(999, 999)
         self.cooldown = 30
         self.motion = False
 
@@ -46,7 +46,7 @@ class Projectile():
 
 
     def get_pos(self):
-        return str(self.center.x) + str(self.center.y)
+        return self.center.x, self.center.y
             
 
 

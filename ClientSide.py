@@ -7,9 +7,7 @@ from pygame.locals import *
 import math
 import random
 
-from player import Player
 from grid import Grid
-from projectile import Projectile 
 
 
 Colours = {
@@ -25,20 +23,8 @@ Colours = {
     }
 
 
-def setup():
-    MAP = map()
-    TILE_WIDTH = math.sqrt((SCREEN_HEIGHT * SCREEN_WIDTH) /  len(MAP)) 
-    level = Grid(MAP, TILE_WIDTH, DISPLAYSURF)
-    P1 = Player(TILE_WIDTH, 5, TILE_WIDTH, TILE_WIDTH, level, [pygame.K_w, pygame.K_s, pygame.K_a, pygame.K_d, pygame.K_q], "1", (174, 137, 218))
-    P2 = Player(TILE_WIDTH, 5, (9) * TILE_WIDTH, (7) * TILE_WIDTH, level, [pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_SPACE], "2", (124, 227, 228))
-    S1 = Projectile(15, P1, level, (0, 0, 0))
-    S2 = Projectile(15, P2, level, (0, 255, 0))
-    P1text = "P1 press q"
-    P2text = "P2 press space"
-    return P1, P2, S1, S2, level, P1text, P2text
 
-
-def shadow_text(size, text, loc, disp)
+def shadow_text(size, text, loc, disp):
     x, y = loc
     DISPLAYSURF.blit(Text(size).render(text, True, Colours["SHADOW"]), (x + disp, y + disp))
     DISPLAYSURF.blit(Text(size).render(text, True, Colours["BLACK"]), loc)
@@ -143,20 +129,26 @@ while True:
 
     ClientSocket.send(str.encode(get_inputs()))
     Response = ClientSocket.recv(1024).decode('utf-8')
-    if Response[0] == "1":
-        if int(Response[2]) != mapnum:
-            mapnum = int(Response[2])
-            level = set_up_map(mapnum)
-        level.draw()
+    print(Response)
+    if len(Response) == (3 + int(Response[1]) * 12):
+        if Response[0] == "1":
+            if int(Response[2]) != mapnum:
+                print ("maping")
+                mapnum = int(Response[2])
+                level = set_up_map(mapnum)
+            level.draw()
 
-        playerlocs = []
-        for i in range(int(Response[1])):
-            playerlocs.append([int(Response[3 + (12 * i):6 + (12 * i)]), int(Response[6 + (12 * i):9 + (12 * i)])])
-            pygame.draw.circle(DISPLAYSURF, [0, 0, 0], (int(Response[9 + (12 * i):12 + (12 * i)]), int(Response[12 + (12 * i):15 + (12 * i)])), 16)
+            playerlocs = []
+            for i in range(int(Response[1])):
+                #print(Response)
+                #print (Response[3 + (12 * i):6 + (12 * i)], Response[3 + (12 * i):6 + (12 * i)] )
+                playerlocs.append([int(Response[3 + (12 * i):6 + (12 * i)]), int(Response[6 + (12 * i):9 + (12 * i)])])
+                pygame.draw.circle(DISPLAYSURF, [0, 0, 0], (int(Response[9 + (12 * i):12 + (12 * i)]), int(Response[12 + (12 * i):15 + (12 * i)])), 16)
 
-        draw_players(playerlocs)
-    else:
-        draw_menu(P1text, P2text, winner, P1Score, P2Score, COUNTDOWN):
+            draw_players(playerlocs)
+            
+        else:
+            draw_menu(Response)
         
 
         
