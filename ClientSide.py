@@ -32,9 +32,7 @@ def shadow_text(size, text, loc, disp):
 def draw_menu(response):
     shadow_text(112, "NEW GAME", (40, 40), 3)
     readys = response[3:3 + int(response[1])]
-    print (response, readys)
     for i in range(int(response[1])):
-        #print (readys[i])
         if readys[i] == "0": 
             shadow_text(112, "P" + str(i+1) + " press space", (40, 120 + i*85), 3)
         else:
@@ -123,14 +121,14 @@ try:
 except socket.error as e:
     print(str(e))
 
-Response = ClientSocket.recv(1024)
+Response = ClientSocket.recv(4096)
 while True:
     pygame.display.update()
     DISPLAYSURF.fill(Colours["GREY"])
-    #DISPLAYSURF.blit(background, (0,0))
+    DISPLAYSURF.blit(background, (0,0))
 
     ClientSocket.send(str.encode(get_inputs()))
-    Response = ClientSocket.recv(1024).decode('utf-8')
+    Response = ClientSocket.recv(4096).decode('utf-8')
     #print(Response)
     if Response[0] == "1" and len(Response) == (3 + int(Response[1]) * 12):
         if int(Response[2]) != mapnum:

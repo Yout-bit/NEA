@@ -5,11 +5,12 @@ from pygame.locals import *
 import math
 from pygame.math import Vector2 
 
-centers = [Vector2(0,0), Vector2(0,0)]
+centers = [Vector2(0,0), Vector2(0,0), Vector2(0,0), Vector2(0,0)]
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, size, move_speed, start_x, start_y, level, name):
+    def __init__(self, size, move_speed, start_x, start_y, level, name, conn):
         super().__init__()
+        self.conn = conn
         self.dir = Vector2(0,0)
         self.wish_dir = Vector2()
         self.level = level
@@ -24,6 +25,7 @@ class Player(pygame.sprite.Sprite):
         self.bonk = 0
         self.dead = False
         self.ready = False
+
 
 
     #Checks whether the player can be moved by the input vector
@@ -44,7 +46,7 @@ class Player(pygame.sprite.Sprite):
     #Checks if the center of the player lies within a players width of the center of the other player
     def detect_player(self):
         for i in centers:
-            if (centers.index(i) != (int(self.name))):
+            if (centers.index(i) != (int(self.name)) and i != Vector2(0,0)):
                 i = Vector2(i)
                 difference = Vector2((i.x - self.rect.centerx), (i.y - self.rect.centery))
                 if (abs(difference.x) <= 80 and abs(difference.y == 0))  or (abs(difference.y) <=80 and abs(difference.x == 0)):
@@ -68,10 +70,14 @@ class Player(pygame.sprite.Sprite):
 
 
     #Normalise the direction vector then checks the wish direction doesnt push the player into a wall and is not opposite to the current direction. Then tests for collision with other player
-    def update(self, inputs):
+    def update(self, output):
+        if len(centers) - 1 < int(self.name):
+            centers.append(self.rect.center)
         centers[int(self.name)] = self.rect.center
+        reply = self.conn.recv(4096).decode('utf-8')
+        self.conn.sendall(str.encode(output))
         if not self.dead:
-            self.input(inputs)
+            self.input(reply)
             if self.dir.magnitude() != 0:
                 normal_dir = self.dir.normalize()
             else:
@@ -84,9 +90,10 @@ class Player(pygame.sprite.Sprite):
             if not self.detect_collision(self.dir):
                 self.rect.move_ip(self.dir * self.move_speed)
 
-    def reset(self):
+    def reset(self, level):
         self.ready = False
         self.rect.move_ip(self.startx - self.rect.left, self.starty - self.rect.top)
+        self.level = level
 
     def destroy(self):
         self.dead = True

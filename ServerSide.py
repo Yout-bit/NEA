@@ -32,10 +32,10 @@ Colours = {
 
 
 def setup(players, shots):
-    mapnum = random.randint(0,7)
+    mapnum = random.randint(7,7)
     level = Collisions(mapnum)
     for player in  players:
-        player.reset()
+        player.reset(level)
     for shot in shots:
         shot.destroy()
         shot.countdown = 0
@@ -51,15 +51,15 @@ def check_hit(player, projectile):
         elif player.rect.collidepoint(projectile.center):
             projectile.destroy()
 
-def create_player(players, number):
+def create_player(players, number, conn):
     if number == 0:
-        players.append(Player(80, 5, 80, 80, level, number))
+        players.append(Player(80, 5, 80, 80, level, number, conn))
     elif number == 1:
-        players.append(Player(80, 5, 720, 560, level, number))
+        players.append(Player(80, 5, 720, 560, level, number, conn))
     elif number == 2:
-        players.append(Player(80, 5, 80, 560, level, number))
+        players.append(Player(80, 5, 80, 560, level, number, conn))
     else:
-        players.append(Player(80, 5, 720, 80, level, number))
+        players.append(Player(80, 5, 720, 80, level, number, conn))
     return players
 
 def threefigs(number):
@@ -69,7 +69,7 @@ def threefigs(number):
     return number
 
 
-mapnum = random.randint(0,7)
+mapnum = random.randint(7,7)
 level = Collisions(mapnum)
 players = []
 shots = []
@@ -89,23 +89,9 @@ except socket.error as e:
 print('Waitiing for a Connection..')
 ServerSocket.listen(5)
 
-def threaded_client(connection, number):
-    global output
-    connection.send(str.encode('Welcome to the Servern'))
-    while True:
-        data = connection.recv(2048)
-        reply = data.decode('utf-8')
-        for i in range(len(players)):
-            if players[i].name == number:
-                players[i].update(reply)
-                shots[i].update()
-        if not data:
-            break
-        connection.sendall(str.encode(output))
-    connection.close()
-
 def threaded_main():
-    global output
+    global players
+    global shots
     game = "Menu"
 
     while True:
@@ -134,6 +120,10 @@ def threaded_main():
             if dead == len(players) - 1:
                 setup(players, shots)
                 game = "Menu"
+        for player in players:
+            player.update(x)
+        for shot in shots:
+            shot.update()
         output = x
 
 
@@ -143,15 +133,16 @@ start_new_thread(threaded_main, ())
 
 #Handelling new connections
 ThreadCount = 0
-while ThreadCount != 4:
+while True:
 
     Client, address = ServerSocket.accept()
     print('Connected to: ' + address[0] + ':' + str(address[1]))
-    start_new_thread(threaded_client, (Client, str(ThreadCount)))
-    players = create_player(players, ThreadCount)
+    Client.send(str.encode('Welcome to the Servern'))
+    #start_new_thread(threaded_client, (Client, str(ThreadCount)))
+    players = create_player(players, ThreadCount, Client)
     shots.append(Projectile(15, players[ThreadCount], level, (0, 0, 0)))
     ThreadCount += 1
-    print('Thread Number: ' + str(ThreadCount))
+    print('Client Number: ' + str(ThreadCount))
 
 
 
