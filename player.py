@@ -65,7 +65,8 @@ class Player(pygame.sprite.Sprite):
 
         self.fire = False 
         if inputs[4] == "1":
-            self.fire = True
+            if self.dir.magnitude() != 0:
+                self.fire = True
             self.ready = True
 
 

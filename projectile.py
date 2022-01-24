@@ -26,8 +26,8 @@ class Projectile():
             self.cooldown -= 1
             return
         #Catches any errors of stationary projectiles 
-        if self.dir.magnitude() == 0:
-            self.destroy()
+        #if self.dir.magnitude() == 0:
+        #    self.destroy()
 
         #When the fire button is first pressed and the projectile is not already in motion
         if self.player.fire and not self.motion:

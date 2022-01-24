@@ -26,13 +26,13 @@ Colours = {
     "RED"   : (255, 0, 0),
     "GREEN" : (0, 255, 0),
     "BLACK" : (0, 0, 0),
-    "WHITE" : (255, 255, 255)  ,
+    "WHITE" : (255, 255, 255),
     "SHADOW": (103, 120, 131)
     }
 
 
 def setup(players, shots):
-    mapnum = random.randint(7,7)
+    mapnum = random.randint(0,7)
     level = Collisions(mapnum)
     for player in  players:
         player.reset(level)
@@ -51,7 +51,7 @@ def check_hit(player, projectile):
         elif player.rect.collidepoint(projectile.center):
             projectile.destroy()
 
-def create_player(players, number, conn):
+def create_player(players, number, conn, level):
     if number == 0:
         players.append(Player(80, 5, 80, 80, level, number, conn))
     elif number == 1:
@@ -69,7 +69,7 @@ def threefigs(number):
     return number
 
 
-mapnum = random.randint(7,7)
+mapnum = random.randint(0,7)
 level = Collisions(mapnum)
 players = []
 shots = []
@@ -93,18 +93,21 @@ def threaded_main():
     global players
     global shots
     game = "Menu"
+    buffer = 120
 
     while True:
         if game == "Menu":
             x = "0" + str(len(players)) + str(mapnum)
             ready = 0
+            while buffer > 0:
+                buffer -= 1
             for player in players:
                 if player.ready:
                     x += "1"
                     ready += 1 
                 else:
                     x += "0"
-            game = "Playing" if ready == len(players) else game
+            game = "Playing" if (len(players) != 0) and ready == len(players) else game
             
         if game == "Playing":
             dead = 0
@@ -119,6 +122,7 @@ def threaded_main():
                     x += threefigs(j)
             if dead == len(players) - 1:
                 setup(players, shots)
+                buffer = 120
                 game = "Menu"
         for player in players:
             player.update(x)
@@ -139,7 +143,7 @@ while True:
     print('Connected to: ' + address[0] + ':' + str(address[1]))
     Client.send(str.encode('Welcome to the Servern'))
     #start_new_thread(threaded_client, (Client, str(ThreadCount)))
-    players = create_player(players, ThreadCount, Client)
+    players = create_player(players, ThreadCount, Client, level)
     shots.append(Projectile(15, players[ThreadCount], level, (0, 0, 0)))
     ThreadCount += 1
     print('Client Number: ' + str(ThreadCount))

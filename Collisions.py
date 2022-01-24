@@ -3,6 +3,7 @@ import sys
 
 class Collisions():
     def __init__(self, mapnum):
+        self.mapnum = mapnum
         if mapnum == 0:
             self.map = self.initailise_map("##########-------##-###-#-##-----#-##-###-#-##-------##-#-###-##-#-----##-#-###-##-------##########")
         elif mapnum == 1:
