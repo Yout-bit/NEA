@@ -4,8 +4,6 @@ import pygame
 from pygame.font import match_font
 from pygame.key import *
 from pygame.locals import *
-import math
-import random
 
 from grid import Grid
 from InputBoxes import InputBox
@@ -108,43 +106,37 @@ background.blit(pygame.transform.scale(pygame.image.load("Menu1.png"), (880, 720
 
 pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-CliantSocket = True
-input_boxh = InputBox(55, 200, 140, 32)
-input_boxp = InputBox(395, 200, 140, 32)
+ClientSocket = True
+input_boxes = [InputBox(55, 200, 140, 32), InputBox(395, 200, 140, 32)]
+text = ""
+
 #Connection menu
-while CliantSocket:
+while ClientSocket == True:
     pygame.display.update()
     DISPLAYSURF.blit(background, (0,0))
     shadow_text(112, "Enter host and port", (40, 40), 3)
     shadow_text(70, "Host:", (55, 150), 2)
     shadow_text(70, "Port:", (395, 150), 2)
 
-    input_boxh.update()
-    input_boxp.update()
-
-    input_boxh.draw(DISPLAYSURF)
-    input_boxp.draw(DISPLAYSURF)
-        
+    for box in input_boxes:
+        box.update()
+        box.draw(DISPLAYSURF)
+    shadow_text(60, text, (50,300), 2)
+             
     FramePerSec.tick(FPS)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        host = input_boxh.handle_event(event)
-        port = input_boxp.handle_event(event)
-    if host != None and port != None:
-        CliantSocket = conn(host, int(port))
-        host = port = None
+        for box in input_boxes:
+            box.handle_event(event)
+    if input_boxes[0].output != "" and input_boxes[1].output != "":
+        ClientSocket = conn(input_boxes[0].output, int(input_boxes[1].output))
+        text = "Server not found"
+        input_boxes[0].output = input_boxes[1].output = ""
+        
 
+        
 background.blit(pygame.transform.scale(pygame.image.load("Menu.png"), (880, 720)), (0,0))
-ClientSocket = socket.socket()
-host = '127.0.0.1'
-port = 1233
-
-print('Waiting for connection')
-try:
-    ClientSocket.connect((host, port))
-except socket.error as e:
-    print(str(e))
 
 Response = ClientSocket.recv(4096)
 #Main loop
@@ -177,6 +169,6 @@ while True:
     FramePerSec.tick(FPS)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = sys.exit()
+            break
 
 ClientSocket.close()
