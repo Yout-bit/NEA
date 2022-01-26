@@ -15,9 +15,6 @@
     -  Roatate
 ---
 
-### Networking - Priority
-1. Rip and Tear until it is done
----
 
 # DONE
 
@@ -52,3 +49,21 @@
      - Change hitbox detection to use rect objects `2/7/21`
      - Add 'ready' screen `3/7/21`
      - Add option to repeat game with newly randomised map `3/7/21`
+
+### Networking
+1. Client - Server communication
+     - Echo Server established and client communication
+     - Server and Client have varible data to send
+2. Game logic
+     - Classes edited to remove unnecessary functions
+     - Grid class split into 2 classes
+     - Server esatblishes instances of classes on cliant join
+     - Server given game logic from prototype
+     - Server sends data from game logic 
+     - Multipul Clients allowed 
+3. Client end
+     - Client displays game from recivied data
+     - Client reads inputs and sends to Server
+     - Client Given Connection menu
+     - Client Menu visuals update
+
