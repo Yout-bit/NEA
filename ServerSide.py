@@ -128,7 +128,6 @@ def threaded_main():
             player.update(x)
         for shot in shots:
             shot.update()
-        output = x
 
 
 
