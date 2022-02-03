@@ -18,8 +18,8 @@ class Player(pygame.sprite.Sprite):
         self.size = int(size)
         self.name = str(name)
         self.rect = pygame.Surface((size, size)).get_rect()
-        self.startx = start_x
-        self.starty = start_y
+        self.start_x = start_x
+        self.start_y = start_y
         self.rect = Rect(start_x, start_y, size, size)
         self.fire = False
         self.bonk = 0
@@ -70,7 +70,7 @@ class Player(pygame.sprite.Sprite):
             self.ready = True
 
 
-    #Normalise the direction vector then checks the wish direction doesnt push the player into a wall and is not opposite to the current direction. Then tests for collision with other player
+    #Normalise the direction vector then checks the wish direction doesnt push the player into a wall and is not opposite to the current direction. Then tests for collision with other players
     def update(self, output):
         if len(centers) - 1 < int(self.name):
             centers.append(self.rect.center)
@@ -91,11 +91,19 @@ class Player(pygame.sprite.Sprite):
             if not self.detect_collision(self.dir):
                 self.rect.move_ip(self.dir * self.move_speed)
 
+    #Resets all attributes to their initial value
     def reset(self, level):
-        self.ready = False
-        self.rect.move_ip(self.startx - self.rect.left, self.starty - self.rect.top)
+        self.dir = Vector2(0,0)
+        self.wish_dir = Vector2()
         self.level = level
+        self.rect = pygame.Surface((self.size, self.size)).get_rect()
+        self.rect = Rect(self.start_x, self.start_y, self.size, self.size)
+        self.fire = False
+        self.bonk = 0
+        self.dead = False
+        self.ready = False
 
+    #Tempuaraly stops the player from preforming inputs and stops them colliding with shots and alive players
     def destroy(self):
         self.dead = True
         self.rect.move_ip(999-self.rect.centerx, 999-self.rect.centery)

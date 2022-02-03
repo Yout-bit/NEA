@@ -40,7 +40,7 @@ def setup(players, shots):
         shot.destroy()
         shot.countdown = 0
 
-    return level, players, shots
+    return players, shots, mapnum
 
 def check_hit(player, projectile):
     hitbox = player.get_hitbox()
@@ -89,7 +89,7 @@ except socket.error as e:
 print('Waitiing for a Connection..')
 ServerSocket.listen(5)
 
-def threaded_main():
+def threaded_main(mapnum):
     global players
     global shots
     game = "Menu"
@@ -121,7 +121,7 @@ def threaded_main():
                 for j in (players[i].get_pos() + shots[i].get_pos()):
                     x += threefigs(j)
             if dead == len(players) - 1:
-                setup(players, shots)
+                players, shots, mapnum = setup(players, shots)
                 buffer = 120
                 game = "Menu"
         for player in players:
@@ -131,12 +131,12 @@ def threaded_main():
 
 
 
-start_new_thread(threaded_main, ())
+start_new_thread(threaded_main, (mapnum,))
 
 
 #Handelling new connections
 ThreadCount = 0
-while True:
+while ThreadCount != 4:
 
     Client, address = ServerSocket.accept()
     print('Connected to: ' + address[0] + ':' + str(address[1]))
