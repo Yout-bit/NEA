@@ -84,6 +84,7 @@ class Player(pygame.sprite.Sprite):
             else:
                 normal_dir = Vector2(0,0)  
 
+            #If the dot product of the 2 vectors = -1, they are opposite.
             if self.wish_dir.dot(normal_dir) != -1 and not self.detect_collision(self.wish_dir):
                 self.dir = self.wish_dir
             
