@@ -7,7 +7,8 @@ from pygame.math import Vector2
 
 centers = [Vector2(0,0), Vector2(0,0), Vector2(0,0), Vector2(0,0)]
 
-class Player(pygame.sprite.Sprite):
+#class Player(pygame.sprite.Sprite):
+class Player():
     def __init__(self, size, move_speed, start_x, start_y, level, name, conn):
         super().__init__()
         self.conn = conn
