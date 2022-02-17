@@ -23,7 +23,6 @@ class Player():
         self.start_y = start_y
         self.rect = Rect(start_x, start_y, size, size)
         self.fire = False
-        self.bonk = 0
         self.dead = False
         self.ready = False
 
@@ -101,7 +100,6 @@ class Player():
         self.rect = pygame.Surface((self.size, self.size)).get_rect()
         self.rect = Rect(self.start_x, self.start_y, self.size, self.size)
         self.fire = False
-        self.bonk = 0
         self.dead = False
         self.ready = False
 
