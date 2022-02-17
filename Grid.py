@@ -82,6 +82,7 @@ class Server_Grid(Grid):
         super().__init__(mapnunm)
         self.tile_width = tile_width
         self.display = display
+        self.create_image_map()
         
     def create_ground(self, row, column):
         G = pygame.Surface((80, 80))
