@@ -8,8 +8,14 @@ from pygame.math import Vector2
 
 centers = [Vector2(0,0), Vector2(0,0), Vector2(0,0), Vector2(0,0)]
 
+<<<<<<< HEAD
 class Player(pygame.sprite.Sprite):
     def __init__(self, size, move_speed, start_x, start_y, level, name, conn, start_rot):
+=======
+#class Player(pygame.sprite.Sprite):
+class Player():
+    def __init__(self, size, move_speed, start_x, start_y, level, name, conn):
+>>>>>>> 3bc3c9cb390b3d4074f9acb9e6c644eb9883c434
         super().__init__()
         self.conn = conn
         self.dir = Vector2(0,0)
@@ -23,7 +29,6 @@ class Player(pygame.sprite.Sprite):
         self.start_y = start_y
         self.rect = Rect(start_x, start_y, size, size)
         self.fire = False
-        self.bonk = 0
         self.dead = False
         self.ready = False
         self.start_rot = start_rot
@@ -85,6 +90,7 @@ class Player(pygame.sprite.Sprite):
             else:
                 normal_dir = Vector2(0,0)  
 
+            #If the dot product of the 2 vectors = -1, they are opposite.
             if self.wish_dir.dot(normal_dir) != -1 and not self.detect_collision(self.wish_dir):
                 self.dir = self.wish_dir
             
@@ -100,7 +106,6 @@ class Player(pygame.sprite.Sprite):
         self.rect = pygame.Surface((self.size, self.size)).get_rect()
         self.rect = Rect(self.start_x, self.start_y, self.size, self.size)
         self.fire = False
-        self.bonk = 0
         self.dead = False
         self.ready = False
 
