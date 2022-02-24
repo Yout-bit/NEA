@@ -1,5 +1,6 @@
 from random import normalvariate
 import random
+import re
 import pygame
 from pygame.locals import *
 import math
@@ -8,7 +9,7 @@ from pygame.math import Vector2
 centers = [Vector2(0,0), Vector2(0,0), Vector2(0,0), Vector2(0,0)]
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, size, move_speed, start_x, start_y, level, name, conn):
+    def __init__(self, size, move_speed, start_x, start_y, level, name, conn, start_rot):
         super().__init__()
         self.conn = conn
         self.dir = Vector2(0,0)
@@ -25,7 +26,7 @@ class Player(pygame.sprite.Sprite):
         self.bonk = 0
         self.dead = False
         self.ready = False
-
+        self.start_rot = start_rot
 
 
     #Checks whether the player can be moved by the input vector
@@ -111,6 +112,20 @@ class Player(pygame.sprite.Sprite):
     #Returns the center of the player
     def get_center(self):
         return Vector2(self.rect.center)
+
+    #Returns the orientation of the player
+    def get_rot(self):
+        if self.dir == (0, 0):
+            return self.start_rot
+        elif self.dir == (0, -1):
+            return "N" 
+        elif self.dir == (1, 0):
+            return "E"
+        elif self.dir == (0, 1):
+            return "S"
+        else:
+            return "W"
+
 
     #Returns the front point of the player (Used for projectile starting pos) 
     def get_front(self):

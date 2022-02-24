@@ -75,7 +75,7 @@ players = []
 shots = []
 
 #Data to send to cliants:
-#[Game State(Menu/Game - 0/1), NumOfPlayers, Map, P1pos, S1pos rept for all players]
+#[Game State(Menu/Game - 0/1), NumOfPlayers, Map, P1pos, S1pos, P1dir (rept for all players)]
 
 ServerSocket = socket.socket()
 host = '127.0.0.1'
@@ -120,6 +120,7 @@ def threaded_main(mapnum):
                         check_hit(players[i], shots[j])
                 for j in (players[i].get_pos() + shots[i].get_pos()):
                     x += threefigs(j)
+                x += players[i].get_rot()
             if dead == len(players) - 1:
                 players, shots, mapnum = setup(players, shots)
                 buffer = 120
