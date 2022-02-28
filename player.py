@@ -8,14 +8,9 @@ from pygame.math import Vector2
 
 centers = [Vector2(0,0), Vector2(0,0), Vector2(0,0), Vector2(0,0)]
 
-<<<<<<< HEAD
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, size, move_speed, start_x, start_y, level, name, conn, start_rot):
-=======
-#class Player(pygame.sprite.Sprite):
-class Player():
-    def __init__(self, size, move_speed, start_x, start_y, level, name, conn):
->>>>>>> 3bc3c9cb390b3d4074f9acb9e6c644eb9883c434
         super().__init__()
         self.conn = conn
         self.dir = Vector2(0,0)
