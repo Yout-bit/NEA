@@ -68,7 +68,7 @@ pygame.draw.rect(L, (33, 33, 33), (0, 20, 60, 40))
 pygame.draw.rect(L, (55, 55, 55), (30, 30, 20, 50))
 pygame.draw.rect(L, (55, 55, 55), (0, 30, 50, 20))
  
-class Cliant_Grid(Grid):
+class Server_Grid(Grid):
     def __init__(self, mapnum):
         super().__init__(mapnum)
         
@@ -77,9 +77,9 @@ class Cliant_Grid(Grid):
         return self.map[math.floor(x / 80)][math.floor(y / 80)]        
         
         
-class Server_Grid(Grid):
+class Client_Grid(Grid):
     def __init__(self, mapnum, tile_width, display):
-        super().__init__(mapnunm)
+        super().__init__(mapnum)
         self.tile_width = tile_width
         self.display = display
         self.create_image_map()

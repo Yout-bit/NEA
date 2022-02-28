@@ -11,7 +11,8 @@ import math
 import random
 
 from player import Player
-from collisions import Collisions
+from grid import Grid
+from grid import Server_Grid
 from projectile import Projectile 
 
 
@@ -33,7 +34,7 @@ Colours = {
 
 def setup(players, shots):
     mapnum = random.randint(0,7)
-    level = Collisions(mapnum)
+    level = Server_Grid(mapnum)
     for player in  players:
         player.reset(level)
     for shot in shots:
@@ -70,7 +71,7 @@ def threefigs(number):
 
 
 mapnum = random.randint(0,7)
-level = Collisions(mapnum)
+level = Server_Grid(mapnum)
 players = []
 shots = []
 

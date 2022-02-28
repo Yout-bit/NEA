@@ -6,6 +6,7 @@ from pygame.key import *
 from pygame.locals import *
 
 from grid import Grid
+from grid import Cliant_Grid
 from InputBoxes import InputBox
 
 
@@ -25,8 +26,8 @@ Colours = {
 
 def shadow_text(size, text, loc, disp):
     x, y = loc
-    DISPLAYSURF.blit(Text(size).render(text, True, Colours["SHADOW"]), (x + disp, y + disp))
-    DISPLAYSURF.blit(Text(size).render(text, True, Colours["BLACK"]), loc)
+    disp.blit(Text(size).render(text, True, Colours["SHADOW"]), (x + disp, y + disp))
+    disp.blit(Text(size).render(text, True, Colours["BLACK"]), loc)
     
 def draw_menu(response):
     shadow_text(112, "NEW GAME", (40, 40), 3)
@@ -65,24 +66,8 @@ def conn(host, port):
 
 mapnum = -1
 
-def set_up_map(map_choice):
-    if map_choice == 0:
-        MAP = "##########-------##-###-#-##-----#-##-###-#-##-------##-#-###-##-#-----##-#-###-##-------##########"
-    elif map_choice == 1:
-        MAP = "##########-------##-#-#-#-##---#-#-####-#-#-##---#---##-#-#-####-#-#---##-#-#-#-##-------##########"
-    elif map_choice == 2:
-        MAP = "##########-------##-#####-##-------##-#-#-#-##---#---##-#-#-#-##-------##-#####-##-------##########"
-    elif map_choice == 3:
-        MAP = "##########-------##-#-###-##-#---#-##-#-#---##-#-#-#-##---#-#-##-#---#-##-###-#-##-------##########"
-    elif map_choice == 4:
-        MAP = "##########-------##-#-###-##-#-###-##-------##-##-##-##-------##-###-#-##-###-#-##-------##########"
-    elif map_choice == 5:
-        MAP = "##########-------##-##-##-##-------##-#-#-#-##-#-#-#-##-#-#-#-##-------##-##-##-##-------##########"
-    elif map_choice == 6:
-        MAP = "##########------###-####-###-#-----##---#-#-##-#---#-##-#-#---##-----#-###-####-###------##########" 
-    elif map_choice == 7:
-        MAP = "##########-------##-#####-##-------###-#-#-####-----####-#-#-###-------##-#####-##-------##########"  
-    level = Grid(MAP, 80, DISPLAYSURF)
+def set_up_map(map_choice, disp):
+    level = Cliant_Grid(map_choice, 80, disp)
     return level
 
 def draw_players(locs):
@@ -151,7 +136,7 @@ while True:
     if Response[0] == "1" and len(Response) == (3 + int(Response[1]) * 12):
         if int(Response[2]) != mapnum:
             mapnum = int(Response[2])
-            level = set_up_map(mapnum)
+            level = set_up_map(mapnum, DISPLAYSURF)
         level.draw()
 
         playerlocs = []
