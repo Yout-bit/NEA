@@ -1,12 +1,14 @@
 import socket
-import sys
+import math
+from turtle import back
 import pygame
+from time import sleep
 from pygame.font import match_font
 from pygame.key import *
 from pygame.locals import *
 
 from grid import Grid
-from grid import Cliant_Grid
+from grid import Client_Grid
 from InputBoxes import InputBox
 
 
@@ -26,8 +28,8 @@ Colours = {
 
 def shadow_text(size, text, loc, disp):
     x, y = loc
-    disp.blit(Text(size).render(text, True, Colours["SHADOW"]), (x + disp, y + disp))
-    disp.blit(Text(size).render(text, True, Colours["BLACK"]), loc)
+    DISPLAYSURF.blit(Text(size).render(text, True, Colours["SHADOW"]), (x + disp, y + disp))
+    DISPLAYSURF.blit(Text(size).render(text, True, Colours["BLACK"]), loc)
     
 def draw_menu(response):
     shadow_text(112, "NEW GAME", (40, 40), 3)
@@ -39,7 +41,6 @@ def draw_menu(response):
             shadow_text(112, "P" + str(i+1) + " is ready", (40, 120 + i*85), 3)
 
 def Text(size):
-    #return pygame.font.Font('Helvetica.ttf', size)
     return pygame.font.SysFont('didot.ttf', size)
 
 def check_pressed(keys, inp):
@@ -67,7 +68,7 @@ def conn(host, port):
 mapnum = -1
 
 def set_up_map(map_choice, disp):
-    level = Cliant_Grid(map_choice, 80, disp)
+    level = Client_Grid(map_choice, 80, disp)
     return level
 
 def draw_players(locs):
@@ -87,7 +88,9 @@ DISPLAYSURF = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Game")
 
 background = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-background.blit(pygame.transform.scale(pygame.image.load("Menu1.png"), (880, 720)), (0,0))
+background.blit(pygame.transform.scale(pygame.image.load("Images\Menu.png"), (880, 720)), (0,0))
+
+
 
 pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
 
@@ -99,6 +102,7 @@ text = ""
 while ClientSocket == True:
     pygame.display.update()
     DISPLAYSURF.blit(background, (0,0))
+
     shadow_text(112, "Enter host and port", (40, 40), 3)
     shadow_text(70, "Host:", (55, 150), 2)
     shadow_text(70, "Port:", (395, 150), 2)
@@ -120,8 +124,22 @@ while ClientSocket == True:
         input_boxes[0].output = input_boxes[1].output = ""
         
 
-        
-background.blit(pygame.transform.scale(pygame.image.load("Menu.png"), (880, 720)), (0,0))
+background.blit(pygame.transform.scale(pygame.image.load("Images\Menu1.png"), (880, 720)), (0,0))        
+background1 = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+background1.blit(pygame.transform.scale(pygame.image.load("Images\Menu1.png"), (880, 720)), (0,0))
+
+pygame.draw.rect(background, Colours["BLACK"], pygame.Rect(83, 533, 65, 65))
+pygame.draw.rect(background, Colours["BLACK"], pygame.Rect(8, 608, 65, 65))
+pygame.draw.rect(background, Colours["BLACK"], pygame.Rect(83, 608, 65, 65))
+pygame.draw.rect(background, Colours["BLACK"], pygame.Rect(158, 608, 65, 65))
+pygame.draw.rect(background, Colours["BLACK"], pygame.Rect(233, 608, 212, 65))
+background.blit(pygame.transform.scale(pygame.image.load("Images\Controls - WASD.png"), (216, 140)), (5, 530))
+background.blit(pygame.transform.scale(pygame.image.load("Images\Controls - Space.png"), (216, 70)), (226, 601))
+
+
+background1.blit(pygame.transform.scale(pygame.image.load("Images\Controls - WASD.png"), (216, 140)), (8, 533))
+background1.blit(pygame.transform.scale(pygame.image.load("Images\Controls - Space.png"), (216, 70)), (229, 604))
+tick = 0.0
 
 Response = ClientSocket.recv(4096)
 #Main loop
@@ -147,7 +165,12 @@ while True:
         draw_players(playerlocs)
             
     else:
-        DISPLAYSURF.blit(background, (0,0))
+        tick += 0.02
+        if math.floor(tick) % 2 == 0:
+            DISPLAYSURF.blit(background, (0,0))
+        else:
+            DISPLAYSURF.blit(background1, (0,0))
+        shadow_text(60, "Movement       Fire",(10,675),1)
         draw_menu(Response)
         
 

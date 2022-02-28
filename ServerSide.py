@@ -1,4 +1,3 @@
-from asyncore import read
 import socket
 import os
 from _thread import *
@@ -54,13 +53,13 @@ def check_hit(player, projectile):
 
 def create_player(players, number, conn, level):
     if number == 0:
-        players.append(Player(80, 5, 80, 80, level, number, conn))
+        players.append(Player(80, 5, 80, 80, level, number, conn, "S"))
     elif number == 1:
-        players.append(Player(80, 5, 720, 560, level, number, conn))
+        players.append(Player(80, 5, 720, 560, level, number, conn, "N"))
     elif number == 2:
-        players.append(Player(80, 5, 80, 560, level, number, conn))
+        players.append(Player(80, 5, 80, 560, level, number, conn, "W"))
     else:
-        players.append(Player(80, 5, 720, 80, level, number, conn))
+        players.append(Player(80, 5, 720, 80, level, number, conn, "E"))
     return players
 
 def threefigs(number):
@@ -75,7 +74,7 @@ level = Server_Grid(mapnum)
 players = []
 shots = []
 
-#Data to send to cliants:
+#Data to send to clients:
 #[Game State(Menu/Game - 0/1), NumOfPlayers, Map, P1pos, S1pos, P1dir (rept for all players)]
 
 ServerSocket = socket.socket()
