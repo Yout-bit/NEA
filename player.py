@@ -51,8 +51,8 @@ class Player():
                 i = Vector2(i)
                 difference = Vector2((i.x - self.rect.centerx), (i.y - self.rect.centery))
                 if (abs(difference.x) <= 80 and abs(difference.y == 0))  or (abs(difference.y) <=80 and abs(difference.x == 0)):
-                    if not self.detect_collision(self.dir):
-                        self.dir = difference.normalize() * -1
+                    #if not self.detect_collision(self.dir):
+                    self.dir = difference.normalize() * -1
 
     #Assigns the wish diretion based on the input and checks if the player fires
     def input(self, inputs):
