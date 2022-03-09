@@ -39,6 +39,7 @@ def setup(players, shots):
     for shot in shots:
         shot.destroy()
         shot.countdown = 0
+        shot.level = level
 
     return players, shots, mapnum
 
