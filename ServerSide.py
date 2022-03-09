@@ -81,7 +81,7 @@ shots = []
 ServerSocket = socket.socket()
 host = '127.0.0.1'
 port = 1233
-ThreadCount = 0
+
 try:
     ServerSocket.bind((host, port))
 except socket.error as e:
@@ -137,14 +137,14 @@ start_new_thread(threaded_main, (mapnum,))
 
 
 #Handelling new connections
-ThreadCount = 0
-while ThreadCount != 4:
+ClientCount= 0
+while ClientCount != 4:
 
     Client, address = ServerSocket.accept() 
     players = create_player(players, ThreadCount, Client, level)
     shots.append(Projectile(15, players[ThreadCount], level, (0, 0, 0)))
     print('Connected to: ' + address[0] + ':' + str(address[1]))
-    print('Client Number: ' + str(ThreadCount))
-    ThreadCount += 1
+    print('Client Number: ' + str(ClientCount))
+    ClientCount += 1
 
 
