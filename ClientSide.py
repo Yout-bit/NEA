@@ -108,8 +108,7 @@ while ClientSocket == True:
     shadow_text(70, "Port:", (395, 150), 2)
 
     for box in input_boxes:
-        box.update()
-        box.draw(DISPLAYSURF)
+        box.update(DISPLAYSURF)     
     shadow_text(60, text, (50,300), 2)
              
     FramePerSec.tick(FPS)
