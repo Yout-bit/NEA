@@ -1,5 +1,3 @@
-import re
-import pygame
 from pygame.math import Vector2 
 
 class Projectile():
@@ -43,7 +41,7 @@ class Projectile():
             else:
                 self.center = self.next_move
 
-    #Returns the projectile's position for the cliant to draw
+    #Returns the projectile's position for the client to draw
     def get_pos(self):
         return self.center.x, self.center.y
             

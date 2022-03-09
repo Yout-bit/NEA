@@ -77,7 +77,7 @@ class Player(pygame.sprite.Sprite):
             centers.append(self.rect.center)
         centers[int(self.name)] = self.rect.center
         reply = self.conn.recv(4096).decode('utf-8')
-        self.conn.sendall(str.encode(output))
+        self.conn.sendall(str.encode(output))   
         if not self.dead:
             self.input(reply)
             if self.dir.magnitude() != 0:
