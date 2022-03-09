@@ -100,10 +100,10 @@ def threaded_main(mapnum):
         if game == "Menu":
             x = "0" + str(len(players)) + str(mapnum)
             ready = 0
-            while buffer > 0:
+            if buffer > 0:
                 buffer -= 1
             for player in players:
-                if player.ready:
+                if player.ready and buffer == 0:
                     x += "1"
                     ready += 1 
                 else:
