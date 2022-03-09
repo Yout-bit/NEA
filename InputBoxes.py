@@ -32,10 +32,11 @@ class InputBox:
                 # Re-render the text.
                 self.txt_surface = pygame.font.SysFont('didot.ttf', 40).render(self.text, True, self.colour)
 
-    def update(self):
+    def update(self, display):
         # Resize the box if the text is too long.
         width = max(200, self.txt_surface.get_width()+10)
         self.rect.w = width
+        self.draw(display)
 
     def draw(self, screen):
         # Blit the text.
