@@ -140,15 +140,11 @@ start_new_thread(threaded_main, (mapnum,))
 ThreadCount = 0
 while ThreadCount != 4:
 
-    Client, address = ServerSocket.accept()
-    print('Connected to: ' + address[0] + ':' + str(address[1]))
-    Client.send(str.encode('Welcome to the Servern'))
-    #start_new_thread(threaded_client, (Client, str(ThreadCount)))
+    Client, address = ServerSocket.accept() 
     players = create_player(players, ThreadCount, Client, level)
     shots.append(Projectile(15, players[ThreadCount], level, (0, 0, 0)))
-    ThreadCount += 1
+    print('Connected to: ' + address[0] + ':' + str(address[1]))
     print('Client Number: ' + str(ThreadCount))
-
-
+    ThreadCount += 1
 
 
