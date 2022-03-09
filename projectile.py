@@ -3,11 +3,10 @@ import pygame
 from pygame.math import Vector2 
 
 class Projectile():
-    def __init__(self, speed, player, level, colour):
+    def __init__(self, speed, player, level):
         self.level = level
         self.player = player
         self.speed = speed
-        self.colour = colour
         self.dir = Vector2(0, 0)
         self.next_move = Vector2()
         self.center = Vector2(999, 999)
