@@ -94,7 +94,7 @@ def threaded_main(mapnum):
     global players
     global shots
     game = "Menu"
-    buffer = 120
+    buffer = 300
 
     while True:
         if game == "Menu":
@@ -124,7 +124,7 @@ def threaded_main(mapnum):
                 x += players[i].get_rot()
             if dead == len(players) - 1:
                 players, shots, mapnum = setup(players, shots)
-                buffer = 120
+                buffer = 300
                 game = "Menu"
         for player in players:
             player.update(x)
