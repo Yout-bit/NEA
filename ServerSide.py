@@ -39,6 +39,7 @@ def setup(players, shots):
     for shot in shots:
         shot.destroy()
         shot.countdown = 0
+        shot.level = level
 
     return players, shots, mapnum
 
@@ -80,7 +81,7 @@ shots = []
 ServerSocket = socket.socket()
 host = '127.0.0.1'
 port = 1233
-ThreadCount = 0
+
 try:
     ServerSocket.bind((host, port))
 except socket.error as e:
@@ -93,16 +94,16 @@ def threaded_main(mapnum):
     global players
     global shots
     game = "Menu"
-    buffer = 120
+    buffer = 300
 
     while True:
         if game == "Menu":
             x = "0" + str(len(players)) + str(mapnum)
             ready = 0
-            while buffer > 0:
+            if buffer > 0:
                 buffer -= 1
             for player in players:
-                if player.ready:
+                if player.ready and buffer == 0:
                     x += "1"
                     ready += 1 
                 else:
@@ -123,7 +124,7 @@ def threaded_main(mapnum):
                 x += players[i].get_rot()
             if dead == len(players) - 1:
                 players, shots, mapnum = setup(players, shots)
-                buffer = 120
+                buffer = 300
                 game = "Menu"
         for player in players:
             player.update(x)
@@ -136,18 +137,14 @@ start_new_thread(threaded_main, (mapnum,))
 
 
 #Handelling new connections
-ThreadCount = 0
-while ThreadCount != 4:
+ClientCount= 0
+while ClientCount != 4:
 
-    Client, address = ServerSocket.accept()
-    print('Connected to: ' + address[0] + ':' + str(address[1]))
-    Client.send(str.encode('Welcome to the Servern'))
-    #start_new_thread(threaded_client, (Client, str(ThreadCount)))
+    Client, address = ServerSocket.accept() 
     players = create_player(players, ThreadCount, Client, level)
     shots.append(Projectile(15, players[ThreadCount], level, (0, 0, 0)))
-    ThreadCount += 1
-    print('Client Number: ' + str(ThreadCount))
-
-
+    print('Connected to: ' + address[0] + ':' + str(address[1]))
+    print('Client Number: ' + str(ClientCount))
+    ClientCount += 1
 
 
