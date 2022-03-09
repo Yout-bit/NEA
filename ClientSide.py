@@ -148,6 +148,7 @@ while True:
     #Communication with server
     ClientSocket.send(str.encode(get_inputs()))
     Response = ClientSocket.recv(4096).decode('utf-8')
+    #print (Response)
 
     #In gameplay
     if Response[0] == "1" and len(Response) == (3 + int(Response[1]) * 12):

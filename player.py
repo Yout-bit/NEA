@@ -9,7 +9,7 @@ from pygame.math import Vector2
 centers = [Vector2(0,0), Vector2(0,0), Vector2(0,0), Vector2(0,0)]
 
 
-class Player(pygame.sprite.Sprite):
+class Player():
     def __init__(self, size, move_speed, start_x, start_y, level, name, conn, start_rot):
         super().__init__()
         self.conn = conn
@@ -126,6 +126,12 @@ class Player(pygame.sprite.Sprite):
         else:
             return "W"
 
+    #Gets a vector perpendicular to the given vector
+    def perp(a):
+        b = Vector2(0,0)
+        b.x = a.y
+        b.y = a.x
+        return b
 
     #Returns the front point of the player (Used for projectile starting pos) 
     def get_front(self):

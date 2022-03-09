@@ -94,7 +94,7 @@ def threaded_main(mapnum):
     global players
     global shots
     game = "Menu"
-    buffer = 300
+    buffer = 120
 
     while True:
         if game == "Menu":
@@ -139,12 +139,14 @@ start_new_thread(threaded_main, (mapnum,))
 #Handelling new connections
 ClientCount= 0
 while ClientCount != 4:
-
-    Client, address = ServerSocket.accept() 
-    players = create_player(players, ThreadCount, Client, level)
-    shots.append(Projectile(15, players[ThreadCount], level, (0, 0, 0)))
+    Client, address = ServerSocket.accept()
+    Client.sendall(str.encode("Welcome to the servern"))
+    players = create_player(players, ClientCount, Client, level)
+    shots.append(Projectile(15, players[ClientCount], level))
+    ClientCount += 1
     print('Connected to: ' + address[0] + ':' + str(address[1]))
     print('Client Number: ' + str(ClientCount))
-    ClientCount += 1
+    print (players)
+
 
 
