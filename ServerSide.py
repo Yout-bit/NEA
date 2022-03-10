@@ -108,7 +108,9 @@ def threaded_main(mapnum):
                     ready += 1 
                 else:
                     x += "0"
+
             game = "Playing" if (len(players) != 0) and ready == len(players) else game
+            
             
         if game == "Playing":
             dead = 0
@@ -126,6 +128,7 @@ def threaded_main(mapnum):
                 players, shots, mapnum = setup(players, shots)
                 buffer = 300
                 game = "Menu"
+        print (x)
         for player in players:
             player.update(x)
         for shot in shots:
@@ -140,7 +143,7 @@ start_new_thread(threaded_main, (mapnum,))
 ClientCount= 0
 while ClientCount != 4:
     Client, address = ServerSocket.accept()
-    Client.sendall(str.encode("Welcome to the servern"))
+    Client.sendall(str.encode("Welcome to the server"))
     players = create_player(players, ClientCount, Client, level)
     shots.append(Projectile(15, players[ClientCount], level))
     ClientCount += 1

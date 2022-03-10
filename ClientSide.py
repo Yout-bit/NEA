@@ -75,6 +75,14 @@ def draw_players(locs):
     for i in range(len(locs)):
         player = pygame.Rect((locs[i][0], locs[i][1]), (80,80))
         pygame.draw.rect(DISPLAYSURF, (30 * (i+1), 50 * (i+1), 70 * (i+1)), player)
+        if locs[i][2] == "N":
+            pygame.draw.rect(DISPLAYSURF, (200, 0, 0), pygame.Rect((locs[i][0], (locs[i][1] + 64)), (80, 16)))
+        elif locs[i][2] == "S":
+            pygame.draw.rect(DISPLAYSURF, (200, 0, 0), pygame.Rect((locs[i][0], locs[i][1]), (80, 16)))
+        elif locs[i][2] == "E":
+            pygame.draw.rect(DISPLAYSURF, (200, 0, 0), pygame.Rect((locs[i][0], locs[i][1]), (16, 80)))
+        else:
+            pygame.draw.rect(DISPLAYSURF, (200, 0, 0), pygame.Rect((locs[i][0] + 64, locs[i][1]), (16, 80)))
               
    
 
@@ -148,10 +156,11 @@ while True:
     #Communication with server
     ClientSocket.send(str.encode(get_inputs()))
     Response = ClientSocket.recv(4096).decode('utf-8')
-    #print (Response)
+    #126 080 080 999 999 S 720 560 999 999 N
 
     #In gameplay
-    if Response[0] == "1" and len(Response) == (3 + int(Response[1]) * 12):
+    if Response[0] == "1" and len(Response) == (3 + int(Response[1]) * 13):
+        print("GAME")
         if int(Response[2]) != mapnum:
             mapnum = int(Response[2])
             level = set_up_map(mapnum, DISPLAYSURF)
@@ -159,8 +168,8 @@ while True:
 
         playerlocs = []
         for i in range(int(Response[1])):
-            playerlocs.append([int(Response[3 + (12 * i):6 + (12 * i)]), int(Response[6 + (12 * i):9 + (12 * i)])])
-            pygame.draw.circle(DISPLAYSURF, [0, 0, 0], (int(Response[9 + (12 * i):12 + (12 * i)]), int(Response[12 + (12 * i):15 + (12 * i)])), 16)
+            playerlocs.append([int(Response[3 + (13 * i):6 + (13 * i)]), int(Response[6 + (13 * i):9 + (13 * i)]), Response[15 + (13 * i)]])
+            pygame.draw.circle(DISPLAYSURF, [0, 0, 0], (int(Response[9 + (13 * i):12 + (13 * i)]), int(Response[12 + (13 * i):15 + (13 * i)])), 16)
 
         draw_players(playerlocs)
             
