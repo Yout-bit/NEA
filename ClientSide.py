@@ -156,11 +156,9 @@ while True:
     #Communication with server
     ClientSocket.send(str.encode(get_inputs()))
     Response = ClientSocket.recv(4096).decode('utf-8')
-    #126 080 080 999 999 S 720 560 999 999 N
 
     #In gameplay
     if Response[0] == "1" and len(Response) == (3 + int(Response[1]) * 13):
-        print("GAME")
         if int(Response[2]) != mapnum:
             mapnum = int(Response[2])
             level = set_up_map(mapnum, DISPLAYSURF)

@@ -26,10 +26,11 @@ if __name__ == "main__":
 
 #126 080 080 999 999 S720560999999N
 x = "126080080999999S720560999999N"
+x = "#########"
 print(len(x))
 
-playerlocs = []
-for i in range(int(x[1])):
-    playerlocs.append([int(x[3 + (13 * i):6 + (13 * i)]), int(x[6 + (13 * i):9 + (13 * i)]), x[15 + (13 * i)]])
+#playerlocs = []
+#for i in range(int(x[1])):
+#    playerlocs.append([int(x[3 + (13 * i):6 + (13 * i)]), int(x[6 + (13 * i):9 + (13 * i)]), x[15 + (13 * i)]])
 
-print (playerlocs)
+#print (playerlocs)

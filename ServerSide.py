@@ -128,7 +128,7 @@ def threaded_main(mapnum):
                 players, shots, mapnum = setup(players, shots)
                 buffer = 300
                 game = "Menu"
-        print (x)
+
         for player in players:
             player.update(x)
         for shot in shots:
@@ -149,7 +149,6 @@ while ClientCount != 4:
     ClientCount += 1
     print('Connected to: ' + address[0] + ':' + str(address[1]))
     print('Client Number: ' + str(ClientCount))
-    print (players)
 
 
 
