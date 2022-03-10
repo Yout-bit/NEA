@@ -162,7 +162,24 @@ class Client_Grid(Grid):
                 else:
                     Black = pygame.Surface((80, 80))
                     pygame.Surface.fill(Black, (153, 170, 181))
-                    
+                    Blanck = pygame.Surface((80, 80))
+pygame.Surface.fill(Blanck, (153, 170, 181))
+pygame.draw.rect(Blanck, (33, 33, 33), (20, 20, 40, 40))
+pygame.draw.rect(Blanck, (55, 55, 55), (30, 30, 20, 20))
+
+x = ["-","#","#","#"]
+
+for i in [[(33, 33, 33),0,0],[(55, 55, 55),10,20]]:
+    if x[0] == "-":
+        pygame.draw.rect(Blanck, i[0], (20+i[1], 0, 40 - i[2], 60 - i[2]))
+    if x[1] == "-":
+        pygame.draw.rect(Blanck, i[0], (20+i[1], 20+i[1], 60, 40 - i[2]))
+    if x[2] == "-":
+        pygame.draw.rect(Blanck, i[0], (20+i[1], 20+i[1], 40 - i[2], 60- i[1]))
+    if x[3] == "-":
+        pygame.draw.rect(Blanck, i[0], (0, 20+i[1], 60- i[1], 40 - i[2]))
+
+pygame.draw.rect(Blanck, (55, 55, 55), (30, 30, 20, 20))
                     if 
     
     def draw(self):
