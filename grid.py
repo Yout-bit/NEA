@@ -150,6 +150,20 @@ class Client_Grid(Grid):
                         line.append(pygame.transform.rotate(Y, 270))
             self.image_map.append(line)
         
+        
+#Hyperthetical new image map creation:
+    def create_image_map_test(self):
+        self.image_map = []
+        for row in range(len(self.map)):
+            line = []
+            for column in range(len(self.map[row])):
+                if self.map[row][column] == "#":
+                    line.append(self.create_ground(row, column))
+                else:
+                    Black = pygame.Surface((80, 80))
+                    pygame.Surface.fill(Black, (153, 170, 181))
+                    
+                    if 
     
     def draw(self):
         for row in range(len(self.map)):
