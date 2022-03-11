@@ -61,30 +61,30 @@ class Client_Grid(Grid):
         self.display = display
         self.create_image_map()
         
-    def create_ground(self, row, column):
+    def create_ground(self, x, y):
         G = pygame.Surface((80, 80))
         pygame.Surface.fill(G, (78, 52, 46))
-        if column == 0:
+        if y == 0:
             pygame.draw.rect(G, (62, 39, 35), (0,0,80,20))
-        elif column == 8:
+        elif y == 8:
             pygame.draw.rect(G, (62, 39, 35), (0,60,80,20))
 
-        if row == 0:
+        if x == 0:
             pygame.draw.rect(G, (62, 39, 35), (0,0,20,80))
-        elif row == 10:
+        elif x == 10:
             pygame.draw.rect(G, (62, 39, 35), (60,0,20,80))
         
-        if column != 0:
-            if self.map[row][column - 1] == "-":
+        if y != 0:
+            if self.map[x][y - 1] == "-":
                 pygame.draw.rect(G, (93, 64, 55), (0,0,80,20))
-        if column != 8:
-            if self.map[row][column + 1] == "-":
+        if y != 8:
+            if self.map[x][y + 1] == "-":
                 pygame.draw.rect(G, (93, 64, 55), (0,60,80,20))
-        if row != 0:
-            if self.map[row - 1][column] == "-":
+        if x != 0:
+            if self.map[x - 1][y] == "-":
                 pygame.draw.rect(G, (93, 64, 55), (0,0,20,80))
-        if row != 10:
-            if self.map[row + 1][column] == "-":
+        if x != 10:
+            if self.map[x + 1][y] == "-":
                 pygame.draw.rect(G, (93, 64, 55), (60,0,20,80))
     
         for i in range(1,random.randint(1,9)):
@@ -98,26 +98,26 @@ class Client_Grid(Grid):
 #New image map creation:
     def create_image_map(self):
         self.image_map = []
-        for row in range(len(self.map)):
+        for x in range(len(self.map)):
             line = []
-            for column in range(len(self.map[row])):
-                if self.map[row][column] == "#":
-                    line.append(self.create_ground(row, column))
+            for y in range(len(self.map[x])):
+                if self.map[x][y] == "#":
+                    line.append(self.create_ground(x, y))
                 else:
                     Blanck = pygame.Surface((80, 80))
                     pygame.Surface.fill(Blanck, (153, 170, 181))
 
-                    #x = [N, E, S, W]
-                    x = [self.map[row][column - 1], self.map[row + 1][column], self.map[row][column + 1], self.map[row - 1][column]]
+                    #Surround = [N, E, S, W]
+                    Surround = [self.map[x][y - 1], self.map[x + 1][y], self.map[x][y + 1], self.map[x - 1][y]]
 
                     for i in [[(33, 33, 33),0,0],[(55, 55, 55),10,20]]:
-                        if x[0] == "-":
+                        if Surround[0] == "-":
                             pygame.draw.rect(Blanck, i[0], (20+i[1], 0, 40 - i[2], 60 - i[2]))
-                        if x[1] == "-":
+                        if Surround[1] == "-":
                             pygame.draw.rect(Blanck, i[0], (20+i[1], 20+i[1], 60, 40 - i[2]))
-                        if x[2] == "-":
+                        if Surround[2] == "-":
                             pygame.draw.rect(Blanck, i[0], (20+i[1], 20+i[1], 40 - i[2], 60- i[1]))
-                        if x[3] == "-":
+                        if Surround[3] == "-":
                             pygame.draw.rect(Blanck, i[0], (0, 20+i[1], 60- i[1], 40 - i[2]))
 
                     pygame.draw.rect(Blanck, (55, 55, 55), (30, 30, 20, 20))
@@ -125,10 +125,10 @@ class Client_Grid(Grid):
             self.image_map.append(line)
     
     def draw(self):
-        for row in range(len(self.map)):
-            for column in range(len(self.map[row])):
-                x = row * self.tile_width
-                y = column * self.tile_width
-                self.display.blit(self.image_map[row][column], (x, y))
+        for comumn in range(len(self.map)):
+            for row in range(len(self.map[column])):
+                x = column * self.tile_width
+                y = row * self.tile_width
+                self.display.blit(self.image_map[column][row], (x, y))
     
     
