@@ -1,44 +1,40 @@
-import socket
-import math
-from turtle import back
+from math import floor
 import pygame
-from time import sleep
-from pygame.font import match_font
-from pygame.key import *
-from pygame.locals import *
+import socket
 
-from grid import Grid
 from grid import Client_Grid
-from InputBoxes import InputBox
+from inputboxes import InputBox
 
 
 Colours = {
-    "BLUEY" : (144, 137, 218),
-    "GREY"  : (153, 170, 181),
-    "DARK"  : (44, 47, 51),
-    "BLUE"  : (0, 0, 255),
     "RED"   : (255, 0, 0),
-    "GREEN" : (0, 255, 0),
     "BLACK" : (0, 0, 0),
-    "WHITE" : (255, 255, 255)  ,
     "SHADOW": (103, 120, 131)
     }
 
+Player_Colours = [
+    (100, 49, 158),
+    (51, 49, 158),
+    (49, 143, 158),
+    (49, 158, 65)
+    ]
 
-
+#Displays text at the given location with some drop shadow to make it easier to read aginast backgrounds that change colour 
 def shadow_text(size, text, loc, disp):
     x, y = loc
     DISPLAYSURF.blit(Text(size).render(text, True, Colours["SHADOW"]), (x + disp, y + disp))
     DISPLAYSURF.blit(Text(size).render(text, True, Colours["BLACK"]), loc)
     
+#Displays the main text, players and scores
 def draw_menu(response):
     shadow_text(112, "NEW GAME", (40, 40), 3)
-    readys = response[3:3 + int(response[1])]
+    shadow_text(60, "SCORES", (700,60), 3)
     for i in range(int(response[1])):
-        if readys[i] == "0": 
+        if response[3 + 2 *i] == "0": 
             shadow_text(112, "P" + str(i+1) + " press space", (40, 120 + i*85), 3)
         else:
             shadow_text(112, "P" + str(i+1) + " is ready", (40, 120 + i*85), 3)
+        shadow_text(122, response[4 + 2 * i], (800, 120 + i*85), 3)
 
 def Text(size):
     return pygame.font.SysFont('didot.ttf', size)
@@ -74,15 +70,15 @@ def set_up_map(map_choice, disp):
 def draw_players(locs):
     for i in range(len(locs)):
         player = pygame.Rect((locs[i][0], locs[i][1]), (80,80))
-        pygame.draw.rect(DISPLAYSURF, (30 * (i+1), 50 * (i+1), 70 * (i+1)), player)
+        pygame.draw.rect(DISPLAYSURF, (Player_Colours[i]), player)
         if locs[i][2] == "N":
-            pygame.draw.rect(DISPLAYSURF, (200, 0, 0), pygame.Rect((locs[i][0], (locs[i][1] + 64)), (80, 16)))
+            pygame.draw.rect(DISPLAYSURF, Colours["RED"], pygame.Rect((locs[i][0], (locs[i][1] + 64)), (80, 16)))
         elif locs[i][2] == "S":
-            pygame.draw.rect(DISPLAYSURF, (200, 0, 0), pygame.Rect((locs[i][0], locs[i][1]), (80, 16)))
+            pygame.draw.rect(DISPLAYSURF, Colours["RED"], pygame.Rect((locs[i][0], locs[i][1]), (80, 16)))
         elif locs[i][2] == "E":
-            pygame.draw.rect(DISPLAYSURF, (200, 0, 0), pygame.Rect((locs[i][0], locs[i][1]), (16, 80)))
+            pygame.draw.rect(DISPLAYSURF, Colours["RED"], pygame.Rect((locs[i][0], locs[i][1]), (16, 80)))
         else:
-            pygame.draw.rect(DISPLAYSURF, (200, 0, 0), pygame.Rect((locs[i][0] + 64, locs[i][1]), (16, 80)))
+            pygame.draw.rect(DISPLAYSURF, Colours["RED"], pygame.Rect((locs[i][0] + 64, locs[i][1]), (16, 80)))
               
    
 
@@ -167,13 +163,13 @@ while True:
         playerlocs = []
         for i in range(int(Response[1])):
             playerlocs.append([int(Response[3 + (13 * i):6 + (13 * i)]), int(Response[6 + (13 * i):9 + (13 * i)]), Response[15 + (13 * i)]])
-            pygame.draw.circle(DISPLAYSURF, [0, 0, 0], (int(Response[9 + (13 * i):12 + (13 * i)]), int(Response[12 + (13 * i):15 + (13 * i)])), 16)
+            pygame.draw.circle(DISPLAYSURF, Colours["BLACK"], (int(Response[9 + (13 * i):12 + (13 * i)]), int(Response[12 + (13 * i):15 + (13 * i)])), 16)
 
         draw_players(playerlocs)
             
     else:
         tick += 0.02
-        if math.floor(tick) % 2 == 0:
+        if floor(tick) % 2 == 0:
             DISPLAYSURF.blit(background, (0,0))
         else:
             DISPLAYSURF.blit(background1, (0,0))

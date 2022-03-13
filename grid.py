@@ -1,10 +1,6 @@
-import pygame
-import math
-import random
-import sys
-
-from pygame import display
-from pygame import image
+from pygame import Surface, draw
+from math import floor
+from random import randint
 
 
 class Grid():
@@ -51,7 +47,7 @@ class Server_Grid(Grid):
         
     def get_grid_value(self, xy):
         x , y = xy       
-        return self.map[math.floor(x / 80)][math.floor(y / 80)]        
+        return self.map[floor(x / 80)][floor(y / 80)]        
         
         
 class Client_Grid(Grid):
@@ -62,35 +58,35 @@ class Client_Grid(Grid):
         self.create_image_map()
         
     def create_ground(self, row, column):
-        G = pygame.Surface((80, 80))
-        pygame.Surface.fill(G, (78, 52, 46))
+        G = Surface((80, 80))
+        Surface.fill(G, (78, 52, 46))
         if column == 0:
-            pygame.draw.rect(G, (62, 39, 35), (0,0,80,20))
+            draw.rect(G, (62, 39, 35), (0,0,80,20))
         elif column == 8:
-            pygame.draw.rect(G, (62, 39, 35), (0,60,80,20))
+            draw.rect(G, (62, 39, 35), (0,60,80,20))
 
         if row == 0:
-            pygame.draw.rect(G, (62, 39, 35), (0,0,20,80))
+            draw.rect(G, (62, 39, 35), (0,0,20,80))
         elif row == 10:
-            pygame.draw.rect(G, (62, 39, 35), (60,0,20,80))
+            draw.rect(G, (62, 39, 35), (60,0,20,80))
         
         if column != 0:
             if self.map[row][column - 1] == "-":
-                pygame.draw.rect(G, (93, 64, 55), (0,0,80,20))
+                draw.rect(G, (93, 64, 55), (0,0,80,20))
         if column != 8:
             if self.map[row][column + 1] == "-":
-                pygame.draw.rect(G, (93, 64, 55), (0,60,80,20))
+                draw.rect(G, (93, 64, 55), (0,60,80,20))
         if row != 0:
             if self.map[row - 1][column] == "-":
-                pygame.draw.rect(G, (93, 64, 55), (0,0,20,80))
+                draw.rect(G, (93, 64, 55), (0,0,20,80))
         if row != 10:
             if self.map[row + 1][column] == "-":
-                pygame.draw.rect(G, (93, 64, 55), (60,0,20,80))
+                draw.rect(G, (93, 64, 55), (60,0,20,80))
     
-        for i in range(1,random.randint(1,9)):
-            pygame.draw.rect(G, (109, 76, 65), (random.randint(0,9)*10, random.randint(0,9)*10, 10, 10))
-        for i in range(1,random.randint(1,9)):
-            pygame.draw.rect(G, (121, 85, 72), (random.randint(0,9)*10, random.randint(0,9)*10, 10, 10))
+        for i in range(1,randint(1,9)):
+            draw.rect(G, (109, 76, 65), (randint(0,9)*10, randint(0,9)*10, 10, 10))
+        for i in range(1,randint(1,9)):
+            draw.rect(G, (121, 85, 72), (randint(0,9)*10, randint(0,9)*10, 10, 10))
         return G       
         
         
@@ -104,31 +100,34 @@ class Client_Grid(Grid):
                 if self.map[row][column] == "#":
                     line.append(self.create_ground(row, column))
                 else:
-                    Blanck = pygame.Surface((80, 80))
-                    pygame.Surface.fill(Blanck, (153, 170, 181))
+                    Blanck = Surface((80, 80))
+                    Surface.fill(Blanck, (153, 170, 181))
 
                     #x = [N, E, S, W]
                     x = [self.map[row][column - 1], self.map[row + 1][column], self.map[row][column + 1], self.map[row - 1][column]]
 
                     for i in [[(33, 33, 33),0,0],[(55, 55, 55),10,20]]:
                         if x[0] == "-":
-                            pygame.draw.rect(Blanck, i[0], (20+i[1], 0, 40 - i[2], 60 - i[2]))
+                            draw.rect(Blanck, i[0], (20+i[1], 0, 40 - i[2], 60 - i[2]))
                         if x[1] == "-":
-                            pygame.draw.rect(Blanck, i[0], (20+i[1], 20+i[1], 60, 40 - i[2]))
+                            draw.rect(Blanck, i[0], (20+i[1], 20+i[1], 60, 40 - i[2]))
                         if x[2] == "-":
-                            pygame.draw.rect(Blanck, i[0], (20+i[1], 20+i[1], 40 - i[2], 60- i[1]))
+                            draw.rect(Blanck, i[0], (20+i[1], 20+i[1], 40 - i[2], 60- i[1]))
                         if x[3] == "-":
-                            pygame.draw.rect(Blanck, i[0], (0, 20+i[1], 60- i[1], 40 - i[2]))
+                            draw.rect(Blanck, i[0], (0, 20+i[1], 60- i[1], 40 - i[2]))
 
-                    pygame.draw.rect(Blanck, (55, 55, 55), (30, 30, 20, 20))
+                    draw.rect(Blanck, (55, 55, 55), (30, 30, 20, 20))
+                    #DRAW STIGHT ONTO SURFACE RATHER THAN ADDING TO LIST?????!!!!!
                     line.append(Blanck)
             self.image_map.append(line)
-    
-    def draw(self):
+        self.cheese = self.display.copy()
         for row in range(len(self.map)):
             for column in range(len(self.map[row])):
                 x = row * self.tile_width
                 y = column * self.tile_width
-                self.display.blit(self.image_map[row][column], (x, y))
+                self.cheese.blit(self.image_map[row][column], (x, y))
+    
+    def draw(self):
+        self.display.blit(self.cheese, (0,0))
     
     

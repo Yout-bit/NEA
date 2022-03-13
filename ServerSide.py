@@ -1,38 +1,16 @@
-import socket
-import os
-from _thread import *
-import sys
-import pygame
-from pygame.font import match_font
-from pygame.key import *
-from pygame.locals import *
-import math
-import random
+from _thread import start_new_thread
+from random import randint
+import socket as sock
+
 
 from player import Player
-from grid import Grid
 from grid import Server_Grid
 from projectile import Projectile 
 
 
-SCREEN_WIDTH = 880
-SCREEN_HEIGHT = 720
-
-Colours = {
-    "BLUEY" : (144, 137, 218),
-    "GREY"  : (153, 170, 181),
-    "DARK"  : (44, 47, 51),
-    "BLUE"  : (0, 0, 255),
-    "RED"   : (255, 0, 0),
-    "GREEN" : (0, 255, 0),
-    "BLACK" : (0, 0, 0),
-    "WHITE" : (255, 255, 255),
-    "SHADOW": (103, 120, 131)
-    }
-
-
+#Resets all the players, projectiles and map
 def setup(players, shots):
-    mapnum = random.randint(0,7)
+    mapnum = randint(0,7)
     level = Server_Grid(mapnum)
     for player in  players:
         player.reset(level)
@@ -43,6 +21,8 @@ def setup(players, shots):
 
     return players, shots, mapnum
 
+#Takes a player and projectile and checks first if they the projectile hits the players hitbox. If so destroys both the player and projectile.
+#Then, if it didn't hit the hitbox, checks if the projectile hits the player. If so destroys the projectile.  
 def check_hit(player, projectile):
     hitbox = player.get_hitbox()
     if hitbox != None and not player.dead:
@@ -52,17 +32,19 @@ def check_hit(player, projectile):
         elif player.rect.collidepoint(projectile.center):
             projectile.destroy()
 
+#Creates a player with hard coded starting value based on which number player they are
 def create_player(players, number, conn, level):
     if number == 0:
         players.append(Player(80, 5, 80, 80, level, number, conn, "S"))
     elif number == 1:
         players.append(Player(80, 5, 720, 560, level, number, conn, "N"))
     elif number == 2:
-        players.append(Player(80, 5, 80, 560, level, number, conn, "W"))
+        players.append(Player(80, 5, 80, 560, level, number, conn, "E"))
     else:
-        players.append(Player(80, 5, 720, 80, level, number, conn, "E"))
+        players.append(Player(80, 5, 720, 80, level, number, conn, "W"))
     return players
 
+#Takes an integer, then returns a 3 didget string of that number
 def threefigs(number):
     number = str(int(number))
     while len(number) < 3:
@@ -70,27 +52,14 @@ def threefigs(number):
     return number
 
 
-mapnum = random.randint(0,7)
+mapnum = randint(0,7)
 level = Server_Grid(mapnum)
 players = []
 shots = []
 
-#Data to send to clients:
-#[Game State(Menu/Game - 0/1), NumOfPlayers, Map, P1pos, S1pos, P1dir (rept for all players)]
-
-ServerSocket = socket.socket()
-host = '127.0.0.1'
-port = 1233
-
-try:
-    ServerSocket.bind((host, port))
-except socket.error as e:
-    print(str(e))
-
-print('Waitiing for a Connection..')
-ServerSocket.listen(5)
-
+#Main gameplay loop
 def threaded_main(mapnum):
+    #Uses 2 global varibales so both threads can manipulate tem at the same time
     global players
     global shots
     game = "Menu"
@@ -98,45 +67,71 @@ def threaded_main(mapnum):
 
     while True:
         if game == "Menu":
-            x = "0" + str(len(players)) + str(mapnum)
+            #Adds the [Gamestate, No. of Player, Mapnumber] to the SendData 
+            SendData = "0" + str(len(players)) + str(mapnum)
             ready = 0
+            #Adds a litlle buffer before the players can ready in prevent accidental readying at the atart of a new game or end of an old one  
             if buffer > 0:
                 buffer -= 1
             for player in players:
+                #for each player, adds a 1/0 if they are Ready/Not to the SendData
                 if player.ready and buffer == 0:
-                    x += "1"
+                    SendData += "1"
+                    #Counts the number of ready players each frame to know when to start the game 
                     ready += 1 
                 else:
-                    x += "0"
-
+                    SendData += "0"
+                SendData += str(player.score)
+            #If there is more than 0 players and the number of ready players = number of players, the game starts
             game = "Playing" if (len(players) != 0) and ready == len(players) else game
             
             
         if game == "Playing":
+            #Adds the [Gamestate, No. of Player, Mapnumber] to the SendData 
+            SendData = "1" + str(len(players)) + str(mapnum)
             dead = 0
-            x = "1" + str(len(players)) + str(mapnum)
             for i in range(len(players)):
                 if players[i].dead:
+                    #Counts the number of dead players each frame to know when to end the game
                     dead += 1 
                 for j in range(len(shots)):
                     if i != j:
+                        #Checks every projectile against every player for a hit except a players own projectile
                         check_hit(players[i], shots[j])
                 for j in (players[i].get_pos() + shots[i].get_pos()):
-                    x += threefigs(j)
-                x += players[i].get_rot()
+                    #For each player and their projectile, takes the position and converts it to a 3 didgit string then adds it to SendData
+                    SendData += threefigs(j)
+                #Adds each player's rotation and adds it to SendData
+                SendData += players[i].get_rot()
+            #If all but 1 players are dead, it resets the players and projectiles, randomises a new mapumn and restes the buffer as players often held the fire button. 
+            #Then returns to the menu 
             if dead == len(players) - 1:
                 players, shots, mapnum = setup(players, shots)
                 buffer = 300
                 game = "Menu"
 
+        #Updates both the player's and projectile's position
         for player in players:
-            player.update(x)
+            player.update(SendData)
         for shot in shots:
             shot.update()
 
 
-
+#Starts the main gameplay loop 
 start_new_thread(threaded_main, (mapnum,))
+
+#Sets up socket object
+ServerSocket = sock.socket()
+host = '127.0.0.1'
+port = 1233
+
+try:
+    ServerSocket.bind((host, port))
+except sock.error as e:
+    print(str(e))
+
+print('Waitiing for a Connection..')
+ServerSocket.listen(5)
 
 
 #Handelling new connections
@@ -150,5 +145,4 @@ while ClientCount != 4:
     print('Connected to: ' + address[0] + ':' + str(address[1]))
     print('Client Number: ' + str(ClientCount))
 
-
-
+sock.close()

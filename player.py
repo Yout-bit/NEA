@@ -1,9 +1,4 @@
-from random import normalvariate
-import random
-import re
-import pygame
-from pygame.locals import *
-import math
+from pygame import Surface, Rect
 from pygame.math import Vector2 
 
 centers = [Vector2(0,0), Vector2(0,0), Vector2(0,0), Vector2(0,0)]
@@ -19,7 +14,6 @@ class Player():
         self.move_speed = move_speed
         self.size = int(size)
         self.name = str(name)
-        self.rect = pygame.Surface((size, size)).get_rect()
         self.start_x = start_x
         self.start_y = start_y
         self.rect = Rect(start_x, start_y, size, size)
@@ -27,7 +21,7 @@ class Player():
         self.dead = False
         self.ready = False
         self.start_rot = start_rot
-
+        self.score = 0
 
     #Checks whether the player can be moved by the input vector
     def detect_collision(self, vec):
@@ -95,10 +89,12 @@ class Player():
 
     #Resets all attributes to their initial value
     def reset(self, level):
+        if not self.dead:
+            self.score += 1
         self.dir = Vector2(0,0)
         self.wish_dir = Vector2()
         self.level = level
-        self.rect = pygame.Surface((self.size, self.size)).get_rect()
+        self.rect = Surface((self.size, self.size)).get_rect()
         self.rect = Rect(self.start_x, self.start_y, self.size, self.size)
         self.fire = False
         self.dead = False

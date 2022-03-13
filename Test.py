@@ -1,36 +1,37 @@
-from pygame.math import Vector2 
-import numpy as np
+import socket
 
-def perpendicular( a ) :
-    b = np.empty_like(a)
-    b[0] = -a[1]
-    b[1] = a[0]
-    return b
+from types import TracebackType
+import pygame
+#from pygame.key import *
+#from pygame.locals import *
+
+from grid import Client_Grid
+from inputboxes import InputBox
 
 
-def perp(a):
-    b = Vector2(0,0)
-    b.x = a.y
-    b.y = a.x
-    return b
 
-def normalize(a):
-    a = np.array(a)
-    return a/np.linalg.norm(a)
+pygame.init()
+FPS = 60
+FramePerSec = pygame.time.Clock()
+SCREEN_WIDTH = 880
+SCREEN_HEIGHT = 720
+DISPLAYSURF = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-if __name__ == "main__":   
-    dir = Vector2(1,0) 
-    a = [-1,0]
-    print (type(perp(dir)))
-    print (perpendicular(dir))
+pygame.display.set_caption("Game")
+while True:
+    pygame.display.update()
+    player_colours = [
+        (100, 49, 158),
+        (51, 49, 158),
+        (49, 143, 158),
+        (49, 158, 65)
+    ]
+    for i in range(4):
+        player = pygame.Rect((80 + 80 * i, 80 + 80 * i), (80,80))
+        pygame.draw.rect(DISPLAYSURF, (player_colours[i]), player)
+        pygame.draw.rect(DISPLAYSURF, (255,0,0), pygame.Rect((80 + 80 * i, 80 + 80 * i), (80, 16)))
 
-#126 080 080 999 999 S720560999999N
-x = "126080080999999S720560999999N"
-x = "#########"
-print(len(x))
-
-#playerlocs = []
-#for i in range(int(x[1])):
-#    playerlocs.append([int(x[3 + (13 * i):6 + (13 * i)]), int(x[6 + (13 * i):9 + (13 * i)]), x[15 + (13 * i)]])
-
-#print (playerlocs)
+    FramePerSec.tick(FPS)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            break
