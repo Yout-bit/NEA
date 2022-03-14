@@ -23,7 +23,7 @@ class Projectile():
             self.cooldown -= 1
             return
             
-        #When the fire button is first pressed and the projectile is not already in motion
+        #When the fire button is first pressed and the projectile is not already in motion, goes to the front of the player and starts motion
         if self.player.fire and not self.motion:
             self.center = self.player.get_front()
             self.motion = True 
