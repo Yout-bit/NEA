@@ -8,7 +8,7 @@ class Grid():
         self.select_map(mapnum)
         self.map = self.initailise_map(self.map)
 
-        
+    #Takes a map as a string and coverts it to a 2D array where each element is a column of the map.   
     def initailise_map(self, map):
         row = []
         fmap = []
@@ -22,23 +22,12 @@ class Grid():
                 Counter = 0
         return fmap 
     
+    #Takes the mapnum and finds the map stored with that number
     def select_map(self, mapnum):  
-        if mapnum == 0:
-            self.map = "##########-------##-###-#-##-----#-##-###-#-##-------##-#-###-##-#-----##-#-###-##-------##########"
-        elif mapnum == 1:
-            self.map = "##########-------##-#-#-#-##---#-#-####-#-#-##---#---##-#-#-####-#-#---##-#-#-#-##-------##########"
-        elif mapnum == 2:
-            self.map = "##########-------##-#####-##-------##-#-#-#-##---#---##-#-#-#-##-------##-#####-##-------##########"
-        elif mapnum == 3:
-            self.map = "##########-------##-#-###-##-#---#-##-#-#---##-#-#-#-##---#-#-##-#---#-##-###-#-##-------##########"
-        elif mapnum == 4:
-            self.map = "##########-------##-#-###-##-#-###-##-------##-##-##-##-------##-###-#-##-###-#-##-------##########"
-        elif mapnum == 5:
-            self.map = "##########-------##-##-##-##-------##-#-#-#-##-#-#-#-##-#-#-#-##-------##-##-##-##-------##########"
-        elif mapnum == 6:
-            self.map = "##########------###-####-###-#-----##---#-#-##-#---#-##-#-#---##-----#-###-####-###------##########"
-        elif mapnum == 7:
-            self.map = "##########-------##-#####-##-------###-#-#-####-----####-#-#-###-------##-#####-##-------##########"
+        with open("Maps.txt", "r") as Maps:
+            Maps = Maps.readlines()
+        Maps = [s.strip() for s in Maps]
+        self.map = Maps[mapnum]
             
  
 class Server_Grid(Grid):
