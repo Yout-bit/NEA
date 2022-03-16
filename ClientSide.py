@@ -53,6 +53,7 @@ def get_inputs():
         x += check_pressed(pressed_keys, key)
     return str(x)
 
+#Tries to connect, else returns true
 def conn(host, port):
     ClientSocket = socket.socket()
     try:
@@ -63,14 +64,17 @@ def conn(host, port):
 
 mapnum = -1
 
+#Creates a Client_Grid object
 def set_up_map(map_choice, disp):
     level = Client_Grid(map_choice, 80, disp)
     return level
 
+#Draws a rect at every players postion, colour dependant on what number player they are
 def draw_players(locs):
     for i in range(len(locs)):
         player = pygame.Rect((locs[i][0], locs[i][1]), (80,80))
         pygame.draw.rect(DISPLAYSURF, (Player_Colours[i]), player)
+        #Calculates and draws the hitbox based on the direction given 
         if locs[i][2] == "N":
             pygame.draw.rect(DISPLAYSURF, Colours["RED"], pygame.Rect((locs[i][0], (locs[i][1] + 64)), (80, 16)))
         elif locs[i][2] == "S":
@@ -81,7 +85,7 @@ def draw_players(locs):
             pygame.draw.rect(DISPLAYSURF, Colours["RED"], pygame.Rect((locs[i][0] + 64, locs[i][1]), (16, 80)))
               
    
-
+#Sets up the pygame window
 pygame.init()
 FPS = 60
 FramePerSec = pygame.time.Clock()
@@ -92,17 +96,13 @@ DISPLAYSURF = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Game")
 
 background = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-background.blit(pygame.transform.scale(pygame.image.load("Images\Menu.png"), (880, 720)), (0,0))
-
-
-
-pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+background.blit(pygame.transform.scale(pygame.image.load("Images\Conn Menu.png"), (880, 720)), (0,0))
 
 ClientSocket = True
-input_boxes = [InputBox(55, 200, 140, 32), InputBox(395, 200, 140, 32)]
+input_boxes = [InputBox(55, 200, 200, 32), InputBox(395, 200, 200, 32)]
 text = ""
 
-#Connection menu
+#Connection menu, loop ends when a connection is found
 while ClientSocket == True:
     pygame.display.update()
     DISPLAYSURF.blit(background, (0,0))
@@ -127,9 +127,9 @@ while ClientSocket == True:
         input_boxes[0].output = input_boxes[1].output = ""
         
 
-background.blit(pygame.transform.scale(pygame.image.load("Images\Menu1.png"), (880, 720)), (0,0))        
-background1 = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-background1.blit(pygame.transform.scale(pygame.image.load("Images\Menu1.png"), (880, 720)), (0,0))
+#Creates 2 background surfaces, each with a different frame of the button animation on
+background.blit(pygame.transform.scale(pygame.image.load("Images\Game Menu.png"), (880, 720)), (0,0))        
+background1 = background.copy()
 
 pygame.draw.rect(background, Colours["BLACK"], pygame.Rect(83, 533, 65, 65))
 pygame.draw.rect(background, Colours["BLACK"], pygame.Rect(8, 608, 65, 65))
@@ -138,7 +138,6 @@ pygame.draw.rect(background, Colours["BLACK"], pygame.Rect(158, 608, 65, 65))
 pygame.draw.rect(background, Colours["BLACK"], pygame.Rect(233, 608, 212, 65))
 background.blit(pygame.transform.scale(pygame.image.load("Images\Controls - WASD.png"), (216, 140)), (5, 530))
 background.blit(pygame.transform.scale(pygame.image.load("Images\Controls - Space.png"), (216, 70)), (226, 601))
-
 
 background1.blit(pygame.transform.scale(pygame.image.load("Images\Controls - WASD.png"), (216, 140)), (8, 533))
 background1.blit(pygame.transform.scale(pygame.image.load("Images\Controls - Space.png"), (216, 70)), (229, 604))
@@ -153,11 +152,15 @@ while True:
     ClientSocket.send(str.encode(get_inputs()))
     Response = ClientSocket.recv(4096).decode('utf-8')
 
-    #In gameplay
-    if Response[0] == "1" and len(Response) == (3 + int(Response[1]) * 13):
-        if int(Response[2]) != mapnum:
-            mapnum = int(Response[2])
-            level = set_up_map(mapnum, DISPLAYSURF)
+    #If the map ever changes (also on start), creates an instance of the client_grid class with the new number
+    if int(Response[2]) != mapnum:
+        mapnum = int(Response[2])
+        level = set_up_map(mapnum, DISPLAYSURF)
+
+    #In gameplay, if the game state is gameplay
+    if Response[0] == "1":
+
+        #Draws the background, then projectiles, then players
         level.draw()
 
         playerlocs = []
@@ -166,10 +169,12 @@ while True:
             pygame.draw.circle(DISPLAYSURF, Colours["BLACK"], (int(Response[9 + (13 * i):12 + (13 * i)]), int(Response[12 + (13 * i):15 + (13 * i)])), 16)
 
         draw_players(playerlocs)
-            
+
+    #Else, the game state is menu    
     else:
-        tick += 0.02
-        if floor(tick) % 2 == 0:
+        #Every 100 frames changes the animtion
+        tick += 1
+        if tick % 200 > 100:
             DISPLAYSURF.blit(background, (0,0))
         else:
             DISPLAYSURF.blit(background1, (0,0))

@@ -29,23 +29,28 @@ class Grid():
         Maps = [s.strip() for s in Maps]
         self.map = Maps[mapnum]
             
- 
+
 class Server_Grid(Grid):
+    #Calls the __init__ method of the grid superclass
     def __init__(self, mapnum):
         super().__init__(mapnum)
         
+    #Returns the value of the grid at the given position
     def get_grid_value(self, xy):
         x , y = xy       
         return self.map[floor(x / 80)][floor(y / 80)]        
         
         
 class Client_Grid(Grid):
+    #Calls the __init__ method of the grid superclass, and creates the image map
     def __init__(self, mapnum, tile_width, display):
         super().__init__(mapnum)
         self.tile_width = tile_width
         self.display = display
         self.create_image_map()
-        
+
+    #Creates a blank tile surface and fills it with brown    
+    #Then, adds darkner and lighter patches round the edges then splatters some randomly placed lighter spots
     def create_ground(self, row, column):
         G = Surface((80, 80))
         Surface.fill(G, (78, 52, 46))
@@ -88,12 +93,15 @@ class Client_Grid(Grid):
                 if self.map[x][y] == "#":
                     Blank = self.create_ground(x, y)
                 else:
+                    #If it is a traversible tile, creates a blank tile and fills it in blue.
+                    #Then finds where it connects to other tiles and draws connections to them.
                     Blank = Surface((80, 80))
                     Surface.fill(Blank, (153, 170, 181))
 
                     #Surround = [N, E, S, W]
                     Surround = [self.map[x][y - 1], self.map[x + 1][y], self.map[x][y + 1], self.map[x - 1][y]]
 
+                    #Draws the darker, larger connections first, then goes other them with a thiner lighter colour.
                     for i in [[(33, 33, 33),0,0],[(55, 55, 55),10,20]]:
                         if Surround[0] == "-":
                             draw.rect(Blank, i[0], (20+i[1], 0, 40 - i[2], 60 - i[2]))
@@ -105,6 +113,7 @@ class Client_Grid(Grid):
                             draw.rect(Blank, i[0], (0, 20+i[1], 60- i[1], 40 - i[2]))
 
                     draw.rect(Blank, (55, 55, 55), (30, 30, 20, 20))
+                #Places the tile onto the full background image
                 self.image_map.blit(Blank, (x * self.tile_width, y * self.tile_width))
     
     def draw(self):

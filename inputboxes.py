@@ -11,15 +11,15 @@ class InputBox:
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
-            # If the user clicked on the input_box rect.
+            #If the user clicked on the box, toggles whether its active or not, else deactivtes the box
             if self.rect.collidepoint(event.pos):
-                # Toggle the active variable.
                 self.active = not self.active
             else:
                 self.active = False
-            # Change the current colour of the input box.
+            # Change the current colour of the input box when active
             self.colour = (134, 81, 158) if self.active else (124, 33, 166)
 
+        #When the user presses a key and the box is active
         if event.type == pygame.KEYDOWN:
             if self.active:
                 if event.key == pygame.K_RETURN:
@@ -29,18 +29,14 @@ class InputBox:
                     self.text = self.text[:-1]
                 else:
                     self.text += event.unicode
-                # Re-render the text.
+                # Re-render the text when the text is changed
                 self.txt_surface = pygame.font.SysFont('didot.ttf', 40).render(self.text, True, self.colour)
 
     def update(self, display):
-        # Resize the box if the text is too long.
-        width = max(200, self.txt_surface.get_width()+10)
-        self.rect.w = width
         self.draw(display)
 
     def draw(self, screen):
-        # Blit the text.
+        #Draws: the box, the text beeing entered, and the output text
         screen.blit(self.txt_surface, (self.rect.x+5, self.rect.y+5))
         screen.blit(pygame.font.SysFont('didot.ttf', 40).render(self.output, True, self.colour), (self.rect.x+5, self.rect.y+5+self.rect.height))
-        # Blit the rect.
         pygame.draw.rect(screen, self.colour, self.rect, 2)
