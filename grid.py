@@ -13,9 +13,9 @@ class Grid():
         row = []
         fmap = []
         Counter = 0
-        for charecter in map:
+        for character in map:
             Counter += 1
-            row.append(charecter)
+            row.append(character)
             if Counter == (9):
                 fmap.append(row)
                 row = []
@@ -93,41 +93,34 @@ class Client_Grid(Grid):
         
 #New image map creation:
     def create_image_map(self):
-        self.image_map = []
+        self.image_map = self.display.copy()
         for x in range(len(self.map)):
-            line = []
             for y in range(len(self.map[x])):
                 if self.map[x][y] == "#":
                     line.append(self.create_ground(x, y))
                 else:
-                    Blanck = Surface((80, 80))
-                    Surface.fill(Blanck, (153, 170, 181))
+                    Blank = Surface((80, 80))
+                    Surface.fill(Blank, (153, 170, 181))
 
                     #Surround = [N, E, S, W]
                     Surround = [self.map[x][y - 1], self.map[x + 1][y], self.map[x][y + 1], self.map[x - 1][y]]
 
                     for i in [[(33, 33, 33),0,0],[(55, 55, 55),10,20]]:
                         if Surround[0] == "-":
-                            draw.rect(Blanck, i[0], (20+i[1], 0, 40 - i[2], 60 - i[2]))
+                            draw.rect(Blank, i[0], (20+i[1], 0, 40 - i[2], 60 - i[2]))
                         if Surround[1] == "-":
-                            draw.rect(Blanck, i[0], (20+i[1], 20+i[1], 60, 40 - i[2]))
+                            draw.rect(Blank, i[0], (20+i[1], 20+i[1], 60, 40 - i[2]))
                         if Surround[2] == "-":
-                            draw.rect(Blanck, i[0], (20+i[1], 20+i[1], 40 - i[2], 60- i[1]))
+                            draw.rect(Blank, i[0], (20+i[1], 20+i[1], 40 - i[2], 60- i[1]))
                         if Surround[3] == "-":
-                            draw.rect(Blanck, i[0], (0, 20+i[1], 60- i[1], 40 - i[2]))
+                            draw.rect(Blank, i[0], (0, 20+i[1], 60- i[1], 40 - i[2]))
 
-                    draw.rect(Blanck, (55, 55, 55), (30, 30, 20, 20))
-                    #DRAW STIGHT ONTO SURFACE RATHER THAN ADDING TO LIST?????!!!!!
-                    line.append(Blanck)
-            self.image_map.append(line)
-        self.cheese = self.display.copy()
-        for row in range(len(self.map)):
-            for column in range(len(self.map[row])):
-                x = row * self.tile_width
-                y = column * self.tile_width
-                self.cheese.blit(self.image_map[row][column], (x, y))
+                    draw.rect(Blank, (55, 55, 55), (30, 30, 20, 20))
+
+                self.image_map.blit(Blank, (x * self.tile_width, y * self.tile_width))   
+
     
     def draw(self):
-        self.display.blit(self.cheese, (0,0))
+        self.display.blit(self.image_map, (0,0))
     
     
