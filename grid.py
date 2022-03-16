@@ -13,9 +13,9 @@ class Grid():
         row = []
         fmap = []
         Counter = 0
-        for charecter in map:
+        for character in map:
             Counter += 1
-            row.append(charecter)
+            row.append(character)
             if Counter == (9):
                 fmap.append(row)
                 row = []
@@ -93,10 +93,8 @@ class Client_Grid(Grid):
         
 #Creates a surface that serves as the background for the game
     def create_image_map(self):
-        self.image_map = []
         self.image_map = self.display.copy()
         for x in range(len(self.map)):
-            line = []
             for y in range(len(self.map[x])):
                 if self.map[x][y] == "#":
                     Blank = self.create_ground(x, y)

@@ -21,8 +21,8 @@ def setup(players, shots):
 
     return players, shots, mapnum
 
-#Takes a player and projectile and checks first if they the projectile hits the players hitbox. If so destroys both the player and projectile.
-#Then, if it didn't hit the hitbox, checks if the projectile hits the player. If so destroys the projectile.  
+#Takes a player and projectile and checks first if the projectile hits the players hitbox. If so, it destroys both the player and projectile.
+#Then, if it didn't hit the hitbox, it checks if the projectile hits the player. If so, it destroys the projectile.  
 def check_hit(player, projectile):
     hitbox = player.get_hitbox()
     if hitbox != None and not player.dead:
@@ -44,7 +44,7 @@ def create_player(players, number, conn, level):
         players.append(Player(80, 5, 720, 80, level, number, conn, "W"))
     return players
 
-#Takes an integer, then returns a 3 didget string of that number
+#Takes an integer, then returns a 3 digit string of that number
 def threefigs(number):
     number = str(int(number))
     while len(number) < 3:
@@ -59,7 +59,7 @@ shots = []
 
 #Main gameplay loop
 def threaded_main(mapnum):
-    #Uses 2 global varibales so both threads can manipulate tem at the same time
+    #Uses 3 global variables so both threads can manipulate them at the same time
     global players
     global shots
     game = "Menu"
@@ -70,7 +70,7 @@ def threaded_main(mapnum):
             #Adds the [Gamestate, No. of Player, Mapnumber] to the SendData 
             SendData = "0" + str(len(players)) + str(mapnum)
             ready = 0
-            #Adds a litlle buffer before the players can ready in prevent accidental readying at the atart of a new game or end of an old one  
+            #Adds a little buffer before the players can ready in prevent accidental readying at the start of a new game or end of an old one
             if buffer > 0:
                 buffer -= 1
             for player in players:
@@ -99,7 +99,7 @@ def threaded_main(mapnum):
                         #Checks every projectile against every player for a hit except a players own projectile
                         check_hit(players[i], shots[j])
                 for j in (players[i].get_pos() + shots[i].get_pos()):
-                    #For each player and their projectile, takes the position and converts it to a 3 didgit string then adds it to SendData
+                    #For each player and their projectile, takes the position and converts it to a 3 digit string then adds it to SendData
                     SendData += threefigs(j)
                 #Adds each player's rotation and adds it to SendData
                 SendData += players[i].get_rot()
@@ -121,20 +121,21 @@ def threaded_main(mapnum):
 start_new_thread(threaded_main, (mapnum,))
 
 #Sets up socket object
-ServerSocket = sock.socket()
-host = '127.0.0.1'
-port = 1233
+ServerSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+host = socket.gethostname()
+port = 5555
 
 try:
     ServerSocket.bind((host, port))
-except sock.error as e:
+except socket.error as e:
     print(str(e))
 
-print('Waitiing for a Connection..')
+
+print('Waiting for a Connection on: \nHost: ' + host + ', Port: ' + str(port))
 ServerSocket.listen(5)
 
 
-#Handelling new connections
+#Handling new connections
 ClientCount= 0
 while ClientCount != 4:
     Client, address = ServerSocket.accept()

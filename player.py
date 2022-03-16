@@ -1,7 +1,7 @@
 from pygame import Surface, Rect
 from pygame.math import Vector2 
 
-centers = [Vector2(0,0), Vector2(0,0), Vector2(0,0), Vector2(0,0)]
+centres = [Vector2(0,0), Vector2(0,0), Vector2(0,0), Vector2(0,0)]
 
 
 class Player():
@@ -38,17 +38,17 @@ class Player():
 
         return self.level.get_grid_value(corner_1.xy) == "#" or self.level.get_grid_value(corner_2.xy) == "#"
 
-    #Checks if the center of the player lies within a players width of the center of the other player
+    #Checks if the centre of the player lies within a players width of the centre of the other player
     def detect_player(self):
-        for i in centers:
-            if (centers.index(i) != (int(self.name)) and i != Vector2(0,0)):
+        for i in centres:
+            if (centres.index(i) != (int(self.name)) and i != Vector2(0,0)):
                 i = Vector2(i)
                 difference = Vector2((i.x - self.rect.centerx), (i.y - self.rect.centery))
                 if (abs(difference.x) <= 80 and abs(difference.y == 0))  or (abs(difference.y) <=80 and abs(difference.x == 0)):
                     #if not self.detect_collision(self.dir):
                     self.dir = difference.normalize() * -1
 
-    #Assigns the wish diretion based on the input and checks if the player fires
+    #Assigns the wish direction based on the input and checks if the player fires
     def input(self, inputs):
         self.wish_dir = Vector2(-1,0) if inputs[2] == "1" else self.wish_dir
         self.wish_dir = Vector2(1,0) if inputs[3] == "1"else self.wish_dir
@@ -65,11 +65,12 @@ class Player():
             self.ready = True
 
 
-    #Normalise the direction vector then checks the wish direction doesnt push the player into a wall and is not opposite to the current direction. Then tests for collision with other players
+    #Normalise the direction vector then checks the wish direction does not push the player into a wall and is not opposite to the current direction. 
+    #Then tests for collision with other players
     def update(self, output):
-        if len(centers) - 1 < int(self.name):
-            centers.append(self.rect.center)
-        centers[int(self.name)] = self.rect.center
+        if len(centres) - 1 < int(self.name):
+            centres.append(self.rect.center)
+        centres[int(self.name)] = self.rect.center
         reply = self.conn.recv(4096).decode('utf-8')
         self.conn.sendall(str.encode(output))   
         if not self.dead:
@@ -100,12 +101,12 @@ class Player():
         self.dead = False
         self.ready = False
 
-    #Tempuaraly stops the player from preforming inputs and stops them colliding with shots and alive players
+    #Temporarily stops the player from performing inputs and stops them colliding with shots 
     def destroy(self):
         self.dead = True
         self.rect.move_ip(999-self.rect.centerx, 999-self.rect.centery)
 
-    #Returns the center of the player
+    #Returns the centre of the player
     def get_center(self):
         return Vector2(self.rect.center)
 

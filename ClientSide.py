@@ -19,7 +19,7 @@ Player_Colours = [
     (49, 158, 65)
     ]
 
-#Displays text at the given location with some drop shadow to make it easier to read aginast backgrounds that change colour 
+#Displays text at the given location with some drop shadow to make it easier to read against backgrounds of differnt colour 
 def shadow_text(size, text, loc, disp):
     x, y = loc
     DISPLAYSURF.blit(Text(size).render(text, True, Colours["SHADOW"]), (x + disp, y + disp))
