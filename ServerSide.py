@@ -121,16 +121,17 @@ def threaded_main(mapnum):
 start_new_thread(threaded_main, (mapnum,))
 
 #Sets up socket object
-ServerSocket = sock.socket()
-host = '127.0.0.1'
-port = 1233
+ServerSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+host = socket.gethostname()
+port = 5555
 
 try:
     ServerSocket.bind((host, port))
-except sock.error as e:
+except socket.error as e:
     print(str(e))
 
-print('Waitiing for a Connection..')
+
+print('Waiting for a Connection on: \nHost: ' + host + ', Port: ' + str(port))
 ServerSocket.listen(5)
 
 
