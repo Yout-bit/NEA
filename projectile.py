@@ -32,7 +32,7 @@ class Projectile():
                 self.dir = self.player.dir 
             else:
                 self.motion = False
-        #Movement - finds next position and checks it is not a wall, then either destroys iteslef or moves accordingly 
+        #Movement - finds next position and checks it is not a wall, then either destroys itself or moves accordingly 
         if self.motion:
             self.next_move = self.center + (self.dir * self.speed)
             if self.level.get_grid_value(self.next_move) == "#":
