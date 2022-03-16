@@ -139,11 +139,11 @@ ServerSocket.listen(5)
 ClientCount= 0
 while ClientCount != 4:
     Client, address = ServerSocket.accept()
-    Client.sendall(str.encode("Welcome to the server"))
     players = create_player(players, ClientCount, Client, level)
     shots.append(Projectile(15, players[ClientCount], level))
     ClientCount += 1
     print('Connected to: ' + address[0] + ':' + str(address[1]))
     print('Client Number: ' + str(ClientCount))
+    Client.sendall(str.encode("Welcome to the server"))
 
 sock.close()
