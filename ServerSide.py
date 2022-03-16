@@ -121,13 +121,13 @@ def threaded_main(mapnum):
 start_new_thread(threaded_main, (mapnum,))
 
 #Sets up socket object
-ServerSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-host = socket.gethostname()
+ServerSocket = sock.socket(sock.AF_INET, sock.SOCK_STREAM)
+host = sock.gethostname()
 port = 5555
 
 try:
     ServerSocket.bind((host, port))
-except socket.error as e:
+except sock.error as e:
     print(str(e))
 
 
