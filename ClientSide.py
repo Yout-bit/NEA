@@ -1,4 +1,3 @@
-from math import floor
 import pygame
 import socket
 
