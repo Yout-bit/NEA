@@ -68,25 +68,32 @@ class Player():
     #Normalise the direction vector then checks the wish direction does not push the player into a wall and is not opposite to the current direction. 
     #Then tests for collision with other players
     def update(self, output):
-        if len(centres) - 1 < int(self.name):
-            centres.append(self.rect.center)
-        centres[int(self.name)] = self.rect.center
-        reply = self.conn.recv(4096).decode('utf-8')
-        self.conn.sendall(str.encode(output))   
-        if not self.dead:
-            self.input(reply)
-            if self.dir.magnitude() != 0:
-                normal_dir = self.dir.normalize()
-            else:
-                normal_dir = Vector2(0,0)  
+        if self.conn != False:
+            if len(centres) - 1 < int(self.name):
+                centres.append(self.rect.center)
+            centres[int(self.name)] = self.rect.center
+            print (self.conn)
+            try:
+                reply = self.conn.recv(4096).decode('utf-8')
+                self.conn.sendall(str.encode(output)) 
+            except ConnectionResetError:
+                self.conn = False
+                reply = "00000"
+      
+            if not self.dead:
+                self.input(reply)
+                if self.dir.magnitude() != 0:
+                    normal_dir = self.dir.normalize()
+                else:
+                    normal_dir = Vector2(0,0)  
 
-            #If the dot product of the 2 vectors = -1, they are opposite.
-            if self.wish_dir.dot(normal_dir) != -1 and not self.detect_collision(self.wish_dir):
-                self.dir = self.wish_dir
-            
-            self.detect_player()
-            if not self.detect_collision(self.dir):
-                self.rect.move_ip(self.dir * self.move_speed)
+                #If the dot product of the 2 vectors = -1, they are opposite.
+                if self.wish_dir.dot(normal_dir) != -1 and not self.detect_collision(self.wish_dir):
+                    self.dir = self.wish_dir
+                
+                self.detect_player()
+                if not self.detect_collision(self.dir):
+                    self.rect.move_ip(self.dir * self.move_speed)
 
     #Resets all attributes to their initial value
     def reset(self, level):
