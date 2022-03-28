@@ -91,7 +91,6 @@ def threaded_main(mapnum):
             SendData = "1" + str(len(players)) + str(mapnum)
             dead = 0
             for i in range(len(players)):
-                #Checks to make sure all players are on the right map
                 if players[i].level.mapnum != mapnum:
                     players[i].level = Server_Grid(mapnum)
                 if players[i].dead:
@@ -115,6 +114,8 @@ def threaded_main(mapnum):
 
         #Updates both the player's and projectile's position
         for player in players:
+            if player.conn == False:
+                players.remove(player)
             player.update(SendData)
         for shot in shots:
             shot.update()
