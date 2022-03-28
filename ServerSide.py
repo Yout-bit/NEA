@@ -91,6 +91,9 @@ def threaded_main(mapnum):
             SendData = "1" + str(len(players)) + str(mapnum)
             dead = 0
             for i in range(len(players)):
+                #Checks to make sure all players are on the right map
+                if players[i].level.mapnum != mapnum:
+                    players[i].level = Server_Grid(mapnum)
                 if players[i].dead:
                     #Counts the number of dead players each frame to know when to end the game
                     dead += 1 
@@ -146,4 +149,4 @@ while ClientCount != 4:
     print('Client Number: ' + str(ClientCount))
     Client.sendall(str.encode("Welcome to the server"))
 
-sock.close()
+print ("Max players met, no more connections")
