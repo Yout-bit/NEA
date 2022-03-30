@@ -69,10 +69,12 @@ def set_up_map(map_choice, disp):
     return level
 
 #Draws a rect at every players postion, colour dependant on what number player they are
-def draw_players(locs):
+def draw_players(locs, Player_Number):
     for i in range(len(locs)):
         player = pygame.Rect((locs[i][0], locs[i][1]), (80,80))
         pygame.draw.rect(DISPLAYSURF, (Player_Colours[i]), player)
+        if (i + 1) == int(Player_Number):
+            pygame.draw.circle(DISPLAYSURF, Colours["BLACK"], (locs[i][0] + 40 , locs[i][1] + 40), 10, 5)
         #Calculates and draws the hitbox based on the direction given 
         if locs[i][2] == "N":
             pygame.draw.rect(DISPLAYSURF, Colours["RED"], pygame.Rect((locs[i][0], (locs[i][1] + 64)), (80, 16)))
@@ -142,7 +144,9 @@ background1.blit(pygame.transform.scale(pygame.image.load("Images\Controls - WAS
 background1.blit(pygame.transform.scale(pygame.image.load("Images\Controls - Space.png"), (216, 70)), (229, 604))
 tick = 0.0
 
-Response = ClientSocket.recv(4096)
+print("X")
+Player_Number = ClientSocket.recv(4096).decode('utf-8')
+print (Player_Number)
 #Main loop
 while True:
     pygame.display.update()
@@ -167,7 +171,7 @@ while True:
             playerlocs.append([int(Response[3 + (13 * i):6 + (13 * i)]), int(Response[6 + (13 * i):9 + (13 * i)]), Response[15 + (13 * i)]])
             pygame.draw.circle(DISPLAYSURF, Colours["BLACK"], (int(Response[9 + (13 * i):12 + (13 * i)]), int(Response[12 + (13 * i):15 + (13 * i)])), 16)
 
-        draw_players(playerlocs)
+        draw_players(playerlocs, Player_Number)
 
     #Else, the game state is menu    
     else:
