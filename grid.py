@@ -5,6 +5,7 @@ from random import randint
 
 class Grid():
     def __init__(self, mapnum):
+        self.mapnum = mapnum
         self.select_map(mapnum)
         self.map = self.initailise_map(self.map)
 
