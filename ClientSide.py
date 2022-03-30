@@ -72,20 +72,26 @@ def set_up_map(map_choice, disp):
 #Draws a rect at every players postion, colour dependant on what number player they are
 def draw_players(locs, Player_Number):
     for i in range(len(locs)):
-        player = pygame.Rect((locs[i][0], locs[i][1]), (80,80))
-        pygame.draw.rect(DISPLAYSURF, (Player_Colours[i]), player)
+        #Highlights the player
         if (i + 1) == int(Player_Number):
-            pygame.draw.circle(DISPLAYSURF, Colours["BLACK"], (locs[i][0] + 40 , locs[i][1] + 40), 10, 5)
+            glow = pygame.Surface((90,90))
+            glow.fill(Player_Colours[i])
+            glow.set_colorkey((0, 0, 0))
+            DISPLAYSURF.blit(glow, (locs[i][0] - 5, locs[i][1] - 5), special_flags=pygame.BLEND_RGB_ADD)
+        
+        final_image = pygame.Surface((80,80))
+        final_image.fill(Player_Colours[i])
         #Calculates and draws the hitbox based on the direction given 
         if locs[i][2] == "N":
-            pygame.draw.rect(DISPLAYSURF, Colours["RED"], pygame.Rect((locs[i][0], (locs[i][1] + 64)), (80, 16)))
+            pygame.draw.rect(final_image, Colours["RED"], pygame.Rect((0, 64), (80, 16)))
         elif locs[i][2] == "S":
-            pygame.draw.rect(DISPLAYSURF, Colours["RED"], pygame.Rect((locs[i][0], locs[i][1]), (80, 16)))
+            pygame.draw.rect(final_image, Colours["RED"], pygame.Rect((0, 0), (80, 16)))
         elif locs[i][2] == "E":
-            pygame.draw.rect(DISPLAYSURF, Colours["RED"], pygame.Rect((locs[i][0], locs[i][1]), (16, 80)))
+            pygame.draw.rect(final_image, Colours["RED"], pygame.Rect((0, 0), (16, 80)))
         else:
-            pygame.draw.rect(DISPLAYSURF, Colours["RED"], pygame.Rect((locs[i][0] + 64, locs[i][1]), (16, 80)))
-              
+            pygame.draw.rect(final_image, Colours["RED"], pygame.Rect((64, 0), (16, 80)))  
+
+        DISPLAYSURF.blit(final_image, (locs[i][0], locs[i][1]))           
    
 #Sets up the pygame window
 pygame.init()
@@ -120,7 +126,7 @@ while ClientSocket == True:
     FramePerSec.tick(FPS)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
+            exit()
         for box in input_boxes:
             box.handle_event(event)
     if input_boxes[0].output != "" and input_boxes[1].output != "":
@@ -145,9 +151,7 @@ background1.blit(pygame.transform.scale(pygame.image.load("Images\Controls - WAS
 background1.blit(pygame.transform.scale(pygame.image.load("Images\Controls - Space.png"), (216, 70)), (229, 604))
 tick = 0.0
 
-print("X")
 Player_Number = ClientSocket.recv(4096).decode('utf-8')
-print (Player_Number)
 #Main loop
 while True:
     pygame.display.update()
@@ -183,6 +187,7 @@ while True:
         else:
             DISPLAYSURF.blit(background1, (0,0))
         shadow_text(60, "Movement       Fire",(10,675),1)
+        shadow_text(60, "P" + str(Player_Number), (800,675), 1)
         draw_menu(Response)
         
 

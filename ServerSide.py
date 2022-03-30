@@ -10,7 +10,7 @@ from projectile import Projectile
 
 #Resets all the players, projectiles and map
 def setup(players, shots):
-    mapnum = randint(0,7)
+    mapnum = randint(0,6)
     level = Server_Grid(mapnum)
     for player in  players:
         player.reset(level)
@@ -52,14 +52,14 @@ def threefigs(number):
     return number
 
 
-mapnum = randint(0,7)
+mapnum = randint(0,6)
 level = Server_Grid(mapnum)
 players = []
 shots = []
 
 #Main gameplay loop
 def threaded_main(mapnum):
-    #Uses 3 global variables so both threads can manipulate them at the same time
+    #Uses 2 global variables so both threads can manipulate them at the same time
     global players
     global shots
     game = "Menu"
@@ -136,7 +136,7 @@ except sock.error as e:
 
 
 print('Waiting for a Connection on: \nHost: ' + host + ', Port: ' + str(port))
-ServerSocket.listen(5)
+ServerSocket.listen()
 
 
 #Handling new connections

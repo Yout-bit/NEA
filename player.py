@@ -72,7 +72,7 @@ class Player():
             if len(centres) - 1 < int(self.name):
                 centres.append(self.rect.center)
             centres[int(self.name)] = self.rect.center
-            print (self.conn)
+
             try:
                 reply = self.conn.recv(4096).decode('utf-8')
                 self.conn.sendall(str.encode(output)) 
