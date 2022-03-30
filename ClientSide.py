@@ -1,6 +1,7 @@
 from math import floor
 import pygame
 import socket
+from sys import exit
 
 from grid import Client_Grid
 from inputboxes import InputBox
@@ -185,6 +186,6 @@ while True:
     FramePerSec.tick(FPS)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            break
+            exit()
 
 ClientSocket.close()
