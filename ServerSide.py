@@ -148,6 +148,6 @@ while ClientCount != 4:
     ClientCount += 1
     print('Connected to: ' + address[0] + ':' + str(address[1]))
     print('Client Number: ' + str(ClientCount))
-    Client.sendall(str.encode("Welcome to the server"))
+    Client.sendall(str.encode(str(ClientCount)))
 
 print ("Max players met, no more connections")
