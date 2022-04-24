@@ -45,7 +45,7 @@ class Player():
             for i in centres:
                 if (centres.index(i) != (int(self.name)) and i != Vector2(0,0)):
                     i = Vector2(i)
-                    difference = sqrt((i.x - self.rect.centerx)^2 + (i.y - self.rect.centery))
+                    difference = sqrt((i.x - self.rect.centerx)**2 + (i.y - self.rect.centery)**2)
                     if difference <= 80:
                         self.dir = Vector2(self.dir * -1)
 
