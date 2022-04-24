@@ -79,6 +79,7 @@ class Player():
                 self.conn.sendall(str.encode(output)) 
             except ConnectionResetError:
                 self.conn = False
+                self.destroy()
                 reply = "00000"
       
             if not self.dead:
