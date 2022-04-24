@@ -1,5 +1,6 @@
 from pygame import Surface, Rect
-from pygame.math import Vector2 
+from pygame.math import Vector2
+from math import sqrt 
 
 centres = [Vector2(0,0), Vector2(0,0), Vector2(0,0), Vector2(0,0)]
 
@@ -40,13 +41,13 @@ class Player():
 
     #Checks if the centre of the player lies within a players width of the centre of the other player
     def detect_player(self):
-        for i in centres:
-            if (centres.index(i) != (int(self.name)) and i != Vector2(0,0)):
-                i = Vector2(i)
-                difference = Vector2((i.x - self.rect.centerx), (i.y - self.rect.centery))
-                if (abs(difference.x) <= 80 and abs(difference.y == 0))  or (abs(difference.y) <=80 and abs(difference.x == 0)):
-                    #if not self.detect_collision(self.dir):
-                    self.dir = difference.normalize() * -1
+        if self.dir.magnitude() != 0:
+            for i in centres:
+                if (centres.index(i) != (int(self.name)) and i != Vector2(0,0)):
+                    i = Vector2(i)
+                    difference = sqrt((i.x - self.rect.centerx)^2 + (i.y - self.rect.centery))
+                    if difference <= 80:
+                        self.dir = Vector2(self.dir * -1)
 
     #Assigns the wish direction based on the input and checks if the player fires
     def input(self, inputs):
