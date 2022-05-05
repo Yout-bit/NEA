@@ -29,9 +29,9 @@ class Projectile():
             self.motion = True 
             #Checks the direction vector is not (0, 0)
             if self.player.dir.magnitude() != 0:
+                self.motion = True 
                 self.dir = self.player.dir 
-            else:
-                self.motion = False
+
         #Movement - finds next position and checks it is not a wall, then either destroys itself or moves accordingly 
         if self.motion:
             self.next_move = self.center + (self.dir * self.speed)
