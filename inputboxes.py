@@ -29,7 +29,7 @@ class InputBox:
                     self.text = self.text[:-1]
                 else:
                     self.text += event.unicode
-                # Re-render the text when the text is changed
+                #Update the screen text when the text is changed
                 self.txt_surface = pygame.font.SysFont('didot.ttf', 40).render(self.text, True, self.colour)
 
     def update(self, display):
