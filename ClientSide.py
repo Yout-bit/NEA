@@ -159,6 +159,7 @@ while True:
     #Communication with server
     ClientSocket.send(str.encode(get_inputs()))
     Response = ClientSocket.recv(4096).decode('utf-8')
+    print(Response)
 
     #If the map ever changes (also on start), creates an instance of the client_grid class with the new number
     if int(Response[2]) != mapnum:
